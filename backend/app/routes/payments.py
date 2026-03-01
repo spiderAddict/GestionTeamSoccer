@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from ..models import Payment, Player, Match
+from ..models.player import Payment
 from .. import db
 
 payments_bp = Blueprint('payments', __name__)

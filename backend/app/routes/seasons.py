@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
-from ..models import db, Season
+from ..models.player import Season
+from .. import db
 
 seasons_bp = Blueprint('seasons', __name__)
 

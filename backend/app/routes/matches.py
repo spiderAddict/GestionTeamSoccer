@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
-from ..models import Match, db
+from ..models.player import Match
+from .. import db
 
 matches_bp = Blueprint('matches', __name__)
 
