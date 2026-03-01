@@ -1,8 +1,9 @@
 from flask import Flask
+from flask_restx import Api
+from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 
 import os
-from flask_restx import Api
 
 db = SQLAlchemy()
 
@@ -23,10 +24,13 @@ def create_app():
     # Initialiser la base de données
     db.init_app(app)
     api.init_app(app)
+
+    # ⚡ Autoriser React
+    CORS(app, resources={r"/api/*": {"origins": "*"}})
     
     # Import namespace
     from .routes.players import ns as players_ns
-    api.add_namespace(players_ns)
+    api.add_namespace(players_ns, path="/api/players")
 
     # 👇 IMPORTER LES MODELES AVANT create_all
     from .models.player import Player

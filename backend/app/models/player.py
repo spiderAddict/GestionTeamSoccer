@@ -1,7 +1,7 @@
 import uuid
 from .. import db
-from flask_restx import fields
 from .. import api
+from flask_restx import fields
 
 class Player(db.Model):
 
