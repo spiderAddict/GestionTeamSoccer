@@ -1,17 +1,22 @@
+# --- Étape 1 : image de base Python ---
 FROM python:3.12-slim
 
+# --- Variables d'environnement pour éviter les prompts ---
+ENV PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1
+
+# --- Créer le répertoire de travail ---
 WORKDIR /app
 
-# Installer les dépendances Python
-COPY backend/requirements.txt .
-
+# --- Copier requirements et installer ---
+COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Créer les répertoires nécessaires avec permissions
-RUN mkdir -p /app/instance && chown -R appuser:appuser /app
+# --- Copier le reste de l'application ---
+COPY . .
 
-USER appuser
-
+# --- Exposer le port utilisé par FastAPI ---
 EXPOSE 5000
 
-CMD ["python", "run.py"]
+# --- Commande par défaut pour démarrer l'application ---
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5000", "--reload"]
