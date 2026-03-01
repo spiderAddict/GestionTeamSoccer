@@ -2,12 +2,12 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Flask Backend",
+      "name": "Flask Api + Front Bulma",
       "type": "python",
       "request": "launch",
       "module": "flask",
       "env": {
-        "FLASK_APP": "backend/run.py",
+        "FLASK_APP": "run.py",
         "FLASK_ENV": "development",
         "FLASK_DEBUG": "1"
       },
@@ -16,29 +16,6 @@
       "cwd": "${workspaceFolder}",
       "console": "integratedTerminal",
       "justMyCode": true
-    },
-    {
-      "name": "React Frontend (Chrome)",
-      "type": "chrome",
-      "request": "launch",
-      "url": "http://localhost:5173",
-      "webRoot": "${workspaceFolder}/frontend",
-      "sourceMaps": true
-    },
-    {
-      "name": "Python: Current File",
-      "type": "python",
-      "request": "launch",
-      "program": "${file}",
-      "console": "integratedTerminal",
-      "justMyCode": true
-    }
-  ],
-  "compounds": [
-    {
-      "name": "Full Stack Debug",
-      "configurations": ["Flask Backend", "React Frontend (Chrome)"],
-      "stopAll": true
     }
   ]
 }

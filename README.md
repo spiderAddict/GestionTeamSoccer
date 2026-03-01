@@ -31,6 +31,7 @@ L'API sera disponible à `http://localhost:5000`
 
 ```bash
 cd frontend
+export REACT_APP_CODESPACES_URL="https://<PUBLIC_BACKEND_URL>"
 npm install
 npm run dev
 ```
