@@ -14,9 +14,15 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 app = FastAPI(
     title="My API",
     version="1.0",
-    docs_url="/docs",  # Swagger UI
-    redoc_url="/redoc"
+    docs_url="/api/docs",
+    redoc_url="/api/redoc",
+    openapi_url="/api/openapi.json"
 )
+# pour la prod
+#app = FastAPI(
+#    docs_url=None,
+#    redoc_url=None
+#)
 # --- CORS pour le frontend si besoin ---
 app.add_middleware(
     CORSMiddleware,
