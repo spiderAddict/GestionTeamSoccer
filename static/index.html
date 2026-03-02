@@ -1,40 +1,27 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 <head>
-  <meta charset="utf-8">
-  <title>Editable List</title>
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <meta charset="UTF-8">
+  <title>SPA Gestion</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script type="module" src="/static/app.js"></script>
 </head>
 <body>
-
-<section class="section">
-  <div class="container">
-    <h1 class="title">Editable List</h1>
-
-    <div class="field has-addons">
-      <div class="control is-expanded">
-        <input id="newItem" class="input" type="text" placeholder="New item">
-      </div>
-      <div class="control">
-        <button class="button is-primary" onclick="addItem()">
-          Add
-        </button>
+  <!-- Navbar -->
+  <nav class="navbar is-primary">
+    <div class="navbar-menu">
+      <div class="navbar-start">
+        <a class="navbar-item" href="/" data-link>Accueil</a>
+        <a class="navbar-item" href="/joueurs" data-link>Joueurs</a>
+        <a class="navbar-item" href="/matchs" data-link>Matchs</a>
       </div>
     </div>
+  </nav>
 
-    <table class="table is-fullwidth is-striped">
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th style="width:150px">Actions</th>
-        </tr>
-      </thead>
-      <tbody id="itemsTable"></tbody>
-    </table>
-  </div>
-</section>
-
-<script src="app.js"></script>
+  <!-- Conteneur SPA -->
+  <section class="section">
+    <div class="container" id="app"></div>
+  </section>
 </body>
 </html>

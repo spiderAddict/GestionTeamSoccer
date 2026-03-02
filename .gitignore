@@ -206,5 +206,5 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 
-
-gestion_soccer.db
+.devcontainer/
+database/gestion_soccer.db

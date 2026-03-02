@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
-DATABASE_URL = "sqlite:///./gestion_soccer.db"  # fichier SQLite local
+DATABASE_URL = "sqlite:///database/gestion_soccer.db"  # fichier SQLite local
 
 engine = create_engine(
     DATABASE_URL, connect_args={"check_same_thread": False}  # nécessaire pour SQLite
