@@ -15,6 +15,13 @@ RUN pip install --no-cache-dir -r requirements.txt
 # --- Copier le reste de l'application ---
 COPY . .
 
+# --- Créer un utilisateur non-root ---
+RUN useradd -m appuser
+# Changer le propriétaire du répertoire de travail
+RUN chown -R appuser:appuser /app
+# Passer à l'utilisateur non-root
+USER appuser
+
 # --- Exposer le port utilisé par FastAPI ---
 EXPOSE 5000
 
