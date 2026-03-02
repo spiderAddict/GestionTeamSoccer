@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Gestion des joueurs</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+</head>
+<body>
+
+<section class="section">
+  <div class="container">
+    <h1 class="title">Joueurs</h1>
+
+    <!-- Formulaire ajout -->
+    <div class="box">
+      <h2 class="subtitle">Ajouter un joueur</h2>
+      <div class="field has-addons">
+        <div class="control is-expanded">
+          <input id="newPlayerName" class="input" type="text" placeholder="Nom du joueur">
+        </div>
+        <div class="control">
+          <button class="button is-primary" onclick="addPlayer()">Ajouter</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Liste -->
+    <table class="table is-fullwidth is-striped">
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="playersTable"></tbody>
+    </table>
+  </div>
+</section>
+
+<script>
+let players = [
+  { id: 1, name: "Jean Dupont" },
+  { id: 2, name: "Lucas Martin" }
+];
+
+function renderPlayers() {
+  const tbody = document.getElementById("playersTable");
+  tbody.innerHTML = "";
+
+  players.forEach(player => {
+    tbody.innerHTML += `
+      <tr>
+        <td>
+          <input class="input" value="${player.name}"
+            onchange="updatePlayer(${player.id}, this.value)">
+        </td>
+        <td>
+          <button class="button is-danger is-light"
+            onclick="deletePlayer(${player.id})">
+            Supprimer
+          </button>
+        </td>
+      </tr>
+    `;
+  });
+}
+
+function addPlayer() {
+  const input = document.getElementById("newPlayerName");
+  if (!input.value) return;
+
+  players.push({
+    id: Date.now(),
+    name: input.value
+  });
+
+  input.value = "";
+  renderPlayers();
+}
+
+function updatePlayer(id, name) {
+  const player = players.find(p => p.id === id);
+  player.name = name;
+}
+
+function deletePlayer(id) {
+  players = players.filter(p => p.id !== id);
+  renderPlayers();
+}
+
+renderPlayers();
+</script>
+
+</body>
+</html>
