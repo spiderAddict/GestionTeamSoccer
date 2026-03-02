@@ -15,6 +15,7 @@ env:
   IMAGE_NAME: ${{ github.repository }}
 
 jobs:
+
   lint-commit:
     name: Commit Lint
     runs-on: ubuntu-latest
@@ -37,52 +38,47 @@ jobs:
           failOnErrors: true   # ❌ stoppe le workflow
           failOnWarnings: false # ⚠️ warnings ne stoppent pas le workflow
 
+  calculate-version:
+    name: Calculate Version
+    runs-on: ubuntu-latest
+    needs: lint-commit
+    outputs:
+      next_version: ${{ steps.get_version.outputs.version }}  # <-- expose comme output du job    
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+      - name: Install Semantic Release
+        run: npm install --save-dev semantic-release @semantic-release/git @semantic-release/changelog @semantic-release/commit-analyzer @semantic-release/release-notes-generator
+      - name: Get next version
+        id: get_version
+        run: |
+          NEXT_VERSION=$(npx semantic-release --dry-run | grep "The next release version is" | awk '{print $6}')
+          echo "Next version: $NEXT_VERSION"
+          echo "version=$NEXT_VERSION" >> $GITHUB_OUTPUT
+
   docker-build:
     name: Build and Tag Docker
     runs-on: ubuntu-latest
-    needs: lint-commit
+    needs: calculate-version
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0   # IMPORTANT pour récupérer les tags
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-        
-      # 🔢 Calcul version
-      - name: Calculate new version
-        id: get_version
-        run: |
-          LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "0.0.0")
-          echo "Last tag: $LAST_TAG"
-
-          COMMIT_MSG=$(git log -1 --pretty=%B)
-          echo "Commit: $COMMIT_MSG"
-
-          MAJOR=$(echo $LAST_TAG | cut -d. -f1)
-          MINOR=$(echo $LAST_TAG | cut -d. -f2)
-          PATCH=$(echo $LAST_TAG | cut -d. -f3)
-
-          if [[ $COMMIT_MSG == feat* ]]; then
-            MINOR=$((MINOR+1))
-            PATCH=0
-          elif [[ $COMMIT_MSG == fix* ]]; then
-            PATCH=$((PATCH+1))
-          else
-            PATCH=$((PATCH+1))
-          fi
-
-          NEW_TAG="$MAJOR.$MINOR.$PATCH"
-          echo "New tag: $NEW_TAG"
-
-          echo "version=$NEW_TAG" >> $GITHUB_OUTPUT
+        uses: docker/setup-buildx-action@v2        
 
       # 🏷️ Créer et push le tag Git
       - name: Create Git Tag
         run: |
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git tag ${{ steps.get_version.outputs.version }}
-          git push origin ${{ steps.get_version.outputs.version }}
+          git tag ${{ needs.calculate-version.outputs.next_version }}
+          git push origin ${{ needs.calculate-version.outputs.next_version }}
 
       - name: Set lowercase image name
         id: image
@@ -103,4 +99,4 @@ jobs:
           push: true
           tags: |
             ${{ env.REGISTRY }}/${{ steps.image.outputs.image }}:latest
-            ${{ env.REGISTRY }}/${{ steps.image.outputs.image }}:${{ steps.get_version.outputs.version }}
+            ${{ env.REGISTRY }}/${{ steps.image.outputs.image }}:${{ needs.calculate-version.outputs.next_version }}
