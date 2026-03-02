@@ -33,7 +33,7 @@ app.include_router(players_router)
 app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "static")), name="static")
 
 # ✅ 2️⃣ Catch-all SPA EN DERNIER
-@app.get("/{full_path:path}")
+@app.get("/{full_path:path}", include_in_schema=False)
 def serve_spa(full_path: str):
 
     # Vérifie si le fichier existe dans static
