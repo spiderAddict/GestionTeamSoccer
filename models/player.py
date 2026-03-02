@@ -1,12 +1,23 @@
-from pydantic import BaseModel
+import uuid
+from sqlalchemy import Column, Text, String
+from database import Base
 
-class Player(BaseModel):
-    id: int
-    name: str
-    position: str
-    team: str | None = None
+class Player(Base):
 
-# import uuid
+    __tablename__ = "player"
+
+    id: str = Column(
+        String(36),
+        primary_key=True,
+        default=lambda: str(uuid.uuid4()), 
+        nullable=False
+    )
+    first_name: str = Column(String(50), nullable=False)
+    last_name: str = Column(String(50), nullable=False)
+    email: str | None = Column(String(100), nullable=True)
+    phone_number: str | None  = Column(String(15), nullable=True)
+    additional_info: str | None = Column(Text, nullable=True)
+
 # from .. import db
 # from .. import api
 # from flask_restx import fields

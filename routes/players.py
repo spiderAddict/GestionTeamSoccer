@@ -1,96 +1,83 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
 from typing import List
+from database import get_db
 from models.player import Player
+from sqlalchemy.orm import Session
+from pydantic import BaseModel
 
 router = APIRouter(
     prefix="/api/players",
     tags=["players"]
 )
 
-# Données en mémoire pour l'exemple
-players: List[Player] = [
-    Player(id=1, name="Lionel Messi", position="Forward", team="PSG"),
-    Player(id=2, name="Cristiano Ronaldo", position="Forward", team="Al Nassr")
-]
+# Schema Pydantic pour requêtes/réponses
+class PlayerSchema(BaseModel):
+    id: str
+    first_name: str
+    last_name: str
+    email: str | None = None
+    phone_number: str | None = None
+    additional_info: str | None = None
+    team: str | None = None
 
+    model_config = {
+        "from_attributes": True  # permet de générer à partir d'un objet SQLAlchemy
+    }
+    
+# --- Schéma utilisé pour la création (pas d'id) ---
+class PlayerCreate(BaseModel):
+    first_name: str
+    last_name: str
+    email: str | None = None
+    phone_number: str | None = None
+    additional_info: str | None = None
+    team: str | None = None
+
+# --- CRUD ---
 # --- Routes ---
-@router.get("", response_model=List[Player])
-def get_players():
-    return players
+@router.get("", response_model=List[PlayerSchema])
+def get_players(db: Session = Depends(get_db)):
+    return db.query(Player).all()
 
-@router.post("", response_model=Player)
-def create_player(player: Player):
-    players.append(player)
-    return player
+@router.post("", response_model=PlayerSchema)
+def create_player(player: PlayerCreate, db: Session = Depends(get_db)):
+    db_player = Player(
+        first_name=player.first_name,
+        last_name=player.last_name,
+        email=player.email,
+        phone_number=player.phone_number,
+        additional_info=player.additional_info)
+    db.add(db_player)
+    db.commit()
+    db.refresh(db_player)
+    return db_player
 
-@router.get("/{player_id}", response_model=Player)
-def get_player(player_id: int):
-    for p in players:
-        if p.id == player_id:
-            return p
-    raise HTTPException(status_code=404, detail="Player not found")
+@router.get("/{player_id}", response_model=PlayerSchema)
+def get_player(player_id: str, db: Session = Depends(get_db)):
+    db_player = db.query(Player).filter(Player.id == player_id).first()
+    if not db_player:
+        raise HTTPException(status_code=404, detail="Player not found")
+    return db_player
 
-@router.put("/{player_id}", response_model=Player)
-def update_player(player_id: int, player: Player):
-    for i, p in enumerate(players):
-        if p.id == player_id:
-            players[i] = player
-            return player
-    raise HTTPException(status_code=404, detail="Player not found")
+@router.put("/{player_id}", response_model=PlayerSchema)
+def update_player(player_id: str, player: PlayerSchema, db: Session = Depends(get_db)):
+    db_player = db.query(Player).filter(Player.id == player_id).first()
+    if not db_player:
+        raise HTTPException(status_code=404, detail="Player not found")
+    db_player.first_name = player.first_name
+    db_player.last_name = player.last_name
+    db_player.email = player.email
+    db_player.phone_number = player.phone_number
+    db_player.additional_info = player.additional_info
+    db.commit()
+    db.refresh(db_player)
+    return db_player
 
 @router.delete("/{player_id}")
-def delete_player(player_id: int):
-    global players
-    players = [p for p in players if p.id != player_id]
+def delete_player(player_id: str, db: Session = Depends(get_db)):
+    db_player = db.query(Player).filter(Player.id == player_id).first()
+    if not db_player:
+        raise HTTPException(status_code=404, detail="Player not found")
+    db.delete(db_player)
+    db.commit()
     return {"status": "deleted"}
-
-    
-
-# from flask_restx import Namespace, Resource
-# from ..models.player import Player, player_model
-# from .. import db
-
-# ns = Namespace("players", description="Opérations sur les joueurs")
-
-# @ns.route("/")
-# class PlayerList(Resource):
-
-#     @ns.marshal_list_with(player_model)
-#     def get(self):
-#         """Lister tous les joueurs"""
-#         return Player.query.all()
-
-#     @ns.expect(player_model)
-#     @ns.marshal_with(player_model, code=201)
-#     def post(self):
-#         """Créer un joueur"""
-#         data = ns.payload
-#         player = Player(
-#             name=data["name"],
-#             email=data["email"]
-#         )
-#         db.session.add(player)
-#         db.session.commit()
-#         return player, 201
-    
-# @ns.route("/<string:id>")
-# class PlayerResource(Resource):
-#     @ns.marshal_with(player_model)
-#     def get(self, id):
-#         return Player.query.get_or_404(id)
-
-#     @ns.expect(player_model)
-#     @ns.marshal_with(player_model)
-#     def put(self, id):
-#         player = Player.query.get_or_404(id)
-#         data = ns.payload
-#         player.name = data["name"]
-#         player.email = data["email"]
-#         db.session.commit()
-#         return player
-
-#     def delete(self, id):
-#         player = Player.query.get_or_404(id)
-#         db.session.delete(player)
-#         db.session.commit()
-#         return {"message": "Utilisateur supprimé"}, 204
