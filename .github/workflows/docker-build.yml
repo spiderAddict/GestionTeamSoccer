@@ -32,6 +32,10 @@ jobs:
       # ✅ Commitlint officiel
       - name: Lint commits
         uses: wagoid/commitlint-github-action@v5
+        with:
+          # configFile: commitlint.config.js
+          failOnError: true   # ❌ stoppe le workflow
+          warning: true       # ⚠️ mais affiche comme warning dans l’UI
 
   docker-build:
     name: Build and Tag Docker
