@@ -1,0 +1,39 @@
+.player-card {
+  background: white;
+  padding: 14px;
+  margin-bottom: 10px;
+  border-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.player-info strong {
+  display: block;
+  font-size: 16px;
+}
+
+.player-info span {
+  font-size: 14px;
+  color: #666;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.player-actions button {
+  background: none;
+  border: none;
+  font-size: 18px;
+  margin-left: 10px;
+}
+
+.player-contact {
+  font-size: 13px;
+  color: #555;
+}
+
+.players-list {
+  padding-bottom: 100px; /* fab + nav + marge */
+}

@@ -31,7 +31,6 @@ class PlayerCreate(BaseModel):
     email: str | None = None
     phone_number: str | None = None
     additional_info: str | None = None
-    team: str | None = None
 
 # --- CRUD ---
 # --- Routes ---
@@ -60,7 +59,7 @@ def get_player(player_id: str, db: Session = Depends(get_db)):
     return db_player
 
 @router.put("/{player_id}", response_model=PlayerSchema)
-def update_player(player_id: str, player: PlayerSchema, db: Session = Depends(get_db)):
+def update_player(player_id: str, player: PlayerCreate, db: Session = Depends(get_db)):
     db_player = db.query(Player).filter(Player.id == player_id).first()
     if not db_player:
         raise HTTPException(status_code=404, detail="Player not found")
