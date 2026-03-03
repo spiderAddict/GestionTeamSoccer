@@ -13,7 +13,10 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # --- Copier le reste de l'application ---
-COPY . .
+COPY . /app
+
+# dossier database existe (utile si volume vide)
+RUN mkdir -p /app/database
 
 # --- Créer un utilisateur non-root ---
 RUN useradd -m appuser
