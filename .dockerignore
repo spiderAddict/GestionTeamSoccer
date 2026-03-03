@@ -1,0 +1,33 @@
+# Environnement virtuel
+.venv/
+env/
+venv/
+
+# Fichiers Python compilés
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Logs et base de données locales
+*.log
+*.sqlite3
+
+# Git
+.git
+.gitignore
+
+# IDE et configs locales
+.vscode/
+.idea/
+
+# Dockerfile et docker-compose (optionnel)
+Dockerfile
+docker-compose.yml
+
+# Node modules si tu as un frontend
+node_modules/
+dist/
+
+# codespace config
+.devcontainer
