@@ -51,7 +51,7 @@ function attachEvents(container, games, players) {
     }
 
     closeModal();
-    await rendergamesPage(container);
+    await renderGamesPage(container);
   };
 
   // Edit buttons

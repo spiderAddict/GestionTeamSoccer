@@ -6,6 +6,8 @@ import os
 
 from database import engine, Base
 import models.player # <-- IMPORTANT pour que SQLAlchemy connaisse le modèle
+import models.match # <-- IMPORTANT pour que SQLAlchemy connaisse le modèle
+
 # --- Créer la base si elle n'existe pas ---
 Base.metadata.create_all(bind=engine)
 
@@ -33,7 +35,9 @@ app.add_middleware(
 
 # ✅ 1️⃣ Inclure les routes API EN PREMIER
 from routes.players import router as players_router
+from routes.matchs import router as matchs_router
 app.include_router(players_router)
+app.include_router(matchs_router)
 
 # --- Serve SPA ---
 app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "static")), name="static")
