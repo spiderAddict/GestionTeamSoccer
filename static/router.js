@@ -1,6 +1,7 @@
 // router.js
 
 import { renderPlayersPage } from "./players/players.controller.js";
+import { renderGamesPage } from "./games/games.controller.js";
 
 const appDiv = document.getElementById("app");
 
@@ -11,7 +12,8 @@ const routes = {
       <p>Bienvenue</p>
     `;
   },
-  "/joueurs": () => renderPlayersPage(appDiv)
+  "/joueurs": () => renderPlayersPage(appDiv),
+  "/matchs": () => renderGamesPage(appDiv)
 };
 
 export function navigateTo(url) {

@@ -1,5 +1,6 @@
 import { getPlayers, createPlayer, updatePlayer, deletePlayer } from "./players.api.js";
 import { playersTemplate } from "./players.template.js";
+
 // Main render function
 export async function renderPlayersPage(container) {
   const players = await getPlayers();
