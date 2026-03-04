@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from typing import List
 from database import get_db
-from models.player import Player
+from models import Player
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 

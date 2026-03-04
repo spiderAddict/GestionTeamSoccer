@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from typing import List
 from database import get_db
-from models.match import Match  # SQLAlchemy Match model
-from models.player import Player
+from models import Match
+from models import Player
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 from datetime import date as DateType
