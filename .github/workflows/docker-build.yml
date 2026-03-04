@@ -58,7 +58,7 @@ jobs:
       - name: Run Semantic Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx semantic-release --no-ci
+        run: npx semantic-release
   
       - name: Get latest release tag
         id: get_tag
