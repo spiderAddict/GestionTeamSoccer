@@ -8,6 +8,10 @@ ENV PYTHONUNBUFFERED=1 \
 # --- Créer le répertoire de travail ---
 WORKDIR /app
 
+# Version de l'application
+ARG APP_VERSION=0.0.0-dev
+ENV APP_VERSION=$APP_VERSION
+
 # --- Copier requirements et installer ---
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt

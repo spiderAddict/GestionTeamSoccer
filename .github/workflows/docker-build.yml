@@ -122,3 +122,5 @@ jobs:
           tags: |
             ${{ env.REGISTRY }}/${{ steps.image.outputs.image }}:latest
             ${{ env.REGISTRY }}/${{ steps.image.outputs.image }}:${{ needs.calculate-version.outputs.next_version }}
+          build-args: |
+            APP_VERSION=${{ needs.calculate-version.outputs.next_version }}
