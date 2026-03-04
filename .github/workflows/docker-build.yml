@@ -61,12 +61,16 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          npx semantic-release --no-ci
-          VERSION=$(cat .releaserc.json | jq -r '.version')  # ou parsez la sortie de semantic-release
+          # Exécute semantic-release en dry-run et capture le JSON
+          npx semantic-release --dry-run --no-ci --debug > result.json 2>&1
+          # Extrait la version du prochain release
+          VERSION=$(jq -r '.nextRelease.version // empty' result.json)
+          # Si aucune version n'est trouvée, fallback sur 'latest'
+          if [ -z "$VERSION" ]; then
+            VERSION="latest"
+          fi
           echo "version=$VERSION" >> $GITHUB_OUTPUT
-      - name: Debug version
-        run: |
-          echo "Next version: '${{ steps.get_version.outputs.version }}'"
+          echo "Next version: $VERSION"
 
   docker-build:
     name: Build and Tag Docker
@@ -109,4 +113,4 @@ jobs:
           push: true
           tags: |
             ${{ env.REGISTRY }}/${{ steps.image.outputs.image }}:latest
-            ${{ env.REGISTRY }}/${{ steps.image.outputs.image }}:${{ needs.calculate-version.outputs.next_version || 'latest' }}
+            ${{ env.REGISTRY }}/${{ steps.image.outputs.image }}:${{ needs.calculate-version.outputs.next_version }}
