@@ -8,6 +8,7 @@ permissions:
   contents: write        # nécessaire pour créer un tag
   packages: write        # nécessaire pour push vers ghcr
   pull-requests: write   # nécessaire pour semantic release
+  issues: write          # nécessaire pour semantic release
   
 env:
   # Use docker.io for Docker Hub if empty
