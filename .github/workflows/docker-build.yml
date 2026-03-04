@@ -53,7 +53,7 @@ jobs:
         with:
           node-version: '20'
       - name: Install Semantic Release
-        run: npm ci
+        run: npm install
       - name: Get next version
         id: get_version
         env:
