@@ -45,7 +45,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: lint-commit
     outputs:
-      next_version: ${{ steps.get_version.outputs.version }}  # <-- expose comme output du job    
+      next_version: ${{ steps.get_tag.outputs.tag }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -53,29 +53,31 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
-      - name: Install Semantic Release
-        run: npm install
-      - name: Get next version
-        id: get_version
+          node-version: '20'     
+
+      - name: Run Semantic Release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release --no-ci
+  
+      - name: Get latest release tag
+        id: get_tag
         run: |
-          # Exécute semantic-release en dry-run et capture le JSON
-          npx semantic-release --dry-run --no-ci --debug > result.json 2>&1
-          # Extrait la version du prochain release
-          VERSION=$(jq -r '.nextRelease.version // empty' result.json)
-          # Si aucune version n'est trouvée, fallback sur 'latest'
-          if [ -z "$VERSION" ]; then
-            VERSION="latest"
+          # Récupère le dernier tag Git créé par semantic-release
+          TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          if [ -z "$TAG" ]; then
+            echo "No new release tag found. Skipping Docker build."
+            echo "tag=" >> $GITHUB_OUTPUT
+          else
+            echo "tag=$TAG" >> $GITHUB_OUTPUT
+            echo "Latest release tag: $TAG"
           fi
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "Next version: $VERSION"
 
   docker-build:
     name: Build and Tag Docker
     runs-on: ubuntu-latest
     needs: calculate-version
+    if: ${{ needs.calculate-version.outputs.next_version != '' }}  # ⚡ ne run que si un tag existe
     steps:
       - name: Debug version
         run: |
