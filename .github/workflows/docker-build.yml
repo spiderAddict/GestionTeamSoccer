@@ -53,22 +53,30 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'     
-
-      - name: Run Semantic Release
-        id: semantic
+          node-version: '20'   
+          
+      - name: Check if release is needed
+        id: check_release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          if npx semantic-release; then
+          OUTPUT=$(npx semantic-release --dry-run 2>&1)
+      
+          if echo "$OUTPUT" | grep -q "The next release version is"; then
             echo "released=true" >> $GITHUB_OUTPUT
           else
             echo "released=false" >> $GITHUB_OUTPUT
           fi
+          
+      - name: Run Semantic Release
+        if: steps.check_release.outputs.released == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx semantic-release
   
       - name: Get latest release tag
+        if: steps.check_release.outputs.released == 'true'
         id: get_tag
-        if: steps.semantic.outputs.released == 'true'
         run: |
           # Récupère le dernier tag Git créé par semantic-release
           TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
