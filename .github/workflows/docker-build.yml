@@ -64,12 +64,18 @@ jobs:
           npx semantic-release --no-ci
           VERSION=$(cat .releaserc.json | jq -r '.version')  # ou parsez la sortie de semantic-release
           echo "version=$VERSION" >> $GITHUB_OUTPUT
+      - name: Debug version
+        run: |
+          echo "Next version: '${{ steps.get_version.outputs.version }}'"
 
   docker-build:
     name: Build and Tag Docker
     runs-on: ubuntu-latest
     needs: calculate-version
     steps:
+      - name: Debug version
+        run: |
+          echo "Next version: '${{ needs.calculate-version.outputs.next_version }}'"
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0   # IMPORTANT pour récupérer les tags
