@@ -4,6 +4,12 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 import os
 
+# migration auto au démarrage
+from alembic import command
+from alembic.config import Config
+alembic_cfg = Config("alembic.ini")
+command.upgrade(alembic_cfg, "head")
+
 from database import engine, Base
 import models.player # <-- IMPORTANT pour que SQLAlchemy connaisse le modèle
 import models.match # <-- IMPORTANT pour que SQLAlchemy connaisse le modèle

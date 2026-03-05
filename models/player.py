@@ -13,7 +13,7 @@ class Player(Base):
         nullable=False
     )
     first_name: str = Column(String(50), nullable=False)
-    last_name: str = Column(String(50), nullable=False)
+    last_name: str = Column(String(50), nullable=True)
     email: str | None = Column(String(100), nullable=True)
     phone_number: str | None  = Column(String(15), nullable=True)
     additional_info: str | None = Column(Text, nullable=True)
