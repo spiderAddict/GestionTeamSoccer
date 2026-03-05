@@ -29,6 +29,7 @@ function attachEvents(container, games, players) {
     const id = container.querySelector("#modal-match-id").value;
     const date = container.querySelector("#match-date").value;
     const result = container.querySelector("#match-result").value.trim();
+    const versus_team = container.querySelector("#match-opponent").value.trim();
     const selectedPlayers = Array.from(container.querySelectorAll(".match-player-checkbox:checked"))
       .map(cb => cb.value);
 
@@ -42,7 +43,7 @@ function attachEvents(container, games, players) {
       return;
     }
 
-    const matchData = { date, result, players: selectedPlayers };
+    const matchData = { date, result, versus_team, players: selectedPlayers };
 
     if (id) {
       await updateGame(id, matchData);
@@ -81,12 +82,15 @@ function openModal(container, players, match = null) {
   const idInput = container.querySelector("#modal-match-id");
   const dateInput = container.querySelector("#match-date");
   const resultInput = container.querySelector("#match-result");
+  const versusTeamInput = container.querySelector("#match-opponent");
   const checkboxes = container.querySelectorAll(".match-player-checkbox");
 
+    console.log("test");
   if (match) {
     idInput.value = match.id;
     dateInput.value = match.date;
     resultInput.value = match.result || "";
+    versusTeamInput.value = match.versus_team || "";
     checkboxes.forEach(cb => cb.checked = match.players.includes(cb.value));
   } else {
     resetModal(container);
@@ -97,5 +101,6 @@ function resetModal(container) {
   container.querySelector("#modal-match-id").value = "";
   container.querySelector("#match-date").value = "";
   container.querySelector("#match-result").value = "";
+  container.querySelector("#match-opponent").value = "";
   container.querySelectorAll(".match-player-checkbox").forEach(cb => cb.checked = false);
 }

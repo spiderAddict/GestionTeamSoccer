@@ -1,0 +1,47 @@
+/* Header de la carte */
+.match-card-header {
+  display: flex;
+  justify-content: space-between; /* infos à gauche, actions à droite */
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+/* Match info côté gauche */
+.match-info {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+/* Boutons d'action côté droit */
+.match-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.match-actions button {
+  padding: 0.3rem 0.5rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-left: 0.5rem;
+}
+
+/* Container pour la liste de joueurs dans une carte */
+.match-players-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+/* Badge joueur bleu */
+.player-badge {
+  background-color: #1e90ff; /* bleu vif */
+  color: white;
+  padding: 0.3rem 0.6rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}

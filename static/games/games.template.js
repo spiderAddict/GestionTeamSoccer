@@ -7,22 +7,30 @@ export function gamesTemplate(games, players) {
     </header>
 
     <div class="games-list">
-      ${games.map(m => `
-        <div class="match-card" title="Joueurs: ${m.players.map(id => {
+      ${games.map(m => {
+        const matchPlayers = m.players.map(id => {
           const p = players.find(pl => pl.id === id);
-          return p ? p.first_name + " " + p.last_name : '';
-        }).join(", ")}">
-          <div class="match-info">
-            <strong>${m.date}</strong>
-            <span>Résultat: ${m.result || "-"}</span>
-            <span>Joueurs: ${m.players.length}</span>
+          return p ? `${p.first_name} ${p.last_name}` : '';
+        }).join(", ");
+
+        return `
+        <div class="match-card">
+          <div class="match-card-header">
+            <div class="match-info">
+              <strong>${m.date}</strong>
+              ${m.versus_team ? `<span>Adversaire: ${m.versus_team}</span>` : ''}
+              ${m.result ? `<span>Résultat: ${m.result}</span>` : ''}
+            </div>
+            <div class="match-actions">
+              <button data-id="${m.id}" data-action="edit">✏️</button>
+              <button data-id="${m.id}" data-action="delete">🗑️</button>
+            </div>
           </div>
-          <div class="match-actions">
-            <button data-id="${m.id}" data-action="edit">✏️</button>
-            <button data-id="${m.id}" data-action="delete">🗑️</button>
-          </div>
-        </div>
-      `).join("")}
+          <div class="match-players-list">
+            ${matchPlayers.split(", ").map(name => `<span class="player-badge">${name}</span>`).join("")}
+          </div>  
+        </div>`;
+      }).join("")}
     </div>
 
     <!-- FAB pour ajout -->
@@ -50,6 +58,13 @@ export function gamesTemplate(games, players) {
             <label class="label">Résultat</label>
             <div class="control">
               <input class="input" type="text" placeholder="ex: 2-1" id="match-result">
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="label">Équipe adverse</label>
+            <div class="control">
+              <input class="input" type="text" placeholder="Nom de l'adversaire" id="match-opponent">
             </div>
           </div>
 

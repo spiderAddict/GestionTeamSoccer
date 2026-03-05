@@ -1,3 +1,10 @@
+.mobile-app {
+  font-family: Arial, sans-serif;
+  padding: 0;
+  margin: 0;
+  background-color: #f7f7f7;
+}
+
 .mobile-header {
   position: sticky;
   top: 0;
