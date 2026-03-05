@@ -36,10 +36,13 @@ export function playersTemplate(players) {
       <section class="modal-card-body">
         <input type="hidden" id="modal-player-id">
         <div class="field">
-          <label class="label">Prénom</label>
+          <label class="label">Prénom *</label>
           <div class="control">
-            <input class="input" type="text" id="new-player-first">
+            <input class="input" type="text" id="new-player-first" required>
           </div>
+          <p class="help is-danger" id="error-last-name" style="display:none;">
+            Le prénom est obligatoire
+          </p>
         </div>
         <div class="field">
           <label class="label">Nom</label>

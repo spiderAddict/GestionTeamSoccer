@@ -35,7 +35,13 @@ function attachEvents(container, players) {
     const phone = container.querySelector("#new-player-phone").value.trim();
     const info = container.querySelector("#new-player-info").value.trim();
 
-    if (!first || !last) return;
+    const error = document.getElementById("error-last-name");
+
+    if (!first) {
+      error.style.display = "block";
+      return;
+    }
+    error.style.display = "none";
 
     if (id) {
       await updatePlayer(id, { first_name: first, last_name: last, email, phone, additional_info: info });
