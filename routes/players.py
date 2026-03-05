@@ -14,7 +14,7 @@ router = APIRouter(
 class PlayerSchema(BaseModel):
     id: str
     first_name: str
-    last_name: str
+    last_name: str | None = None
     email: str | None = None
     phone_number: str | None = None
     additional_info: str | None = None
@@ -27,7 +27,7 @@ class PlayerSchema(BaseModel):
 # --- Schéma utilisé pour la création (pas d'id) ---
 class PlayerCreate(BaseModel):
     first_name: str
-    last_name: str
+    last_name: str | None = None
     email: str | None = None
     phone_number: str | None = None
     additional_info: str | None = None

@@ -13,7 +13,7 @@ export function playersTemplate(players) {
             <strong>${p.first_name}</strong>
             <span>${p.last_name}</span>
             <span class="player-contact">${p.email ? '📧 ' + p.email : ''}</span>
-            <span class="player-contact">${p.phone ? '📞 ' + p.phone : ''}</span>
+            <span class="player-contact">${p.phone_number ? '📞 ' + p.phone_number : ''}</span>
           </div>
 
           <div class="player-actions">

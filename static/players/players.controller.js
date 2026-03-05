@@ -32,7 +32,7 @@ function attachEvents(container, players) {
     const first = container.querySelector("#new-player-first").value.trim();
     const last = container.querySelector("#new-player-last").value.trim();
     const email = container.querySelector("#new-player-email").value.trim();
-    const phone = container.querySelector("#new-player-phone").value.trim();
+    const phone_number = container.querySelector("#new-player-phone").value.trim();
     const info = container.querySelector("#new-player-info").value.trim();
 
     const error = document.getElementById("error-last-name");
@@ -44,9 +44,9 @@ function attachEvents(container, players) {
     error.style.display = "none";
 
     if (id) {
-      await updatePlayer(id, { first_name: first, last_name: last, email, phone, additional_info: info });
+      await updatePlayer(id, { first_name: first, last_name: last, email, phone_number, additional_info: info });
     } else {
-      await createPlayer({ first_name: first, last_name: last, email, phone, additional_info: info });
+      await createPlayer({ first_name: first, last_name: last, email, phone_number, additional_info: info });
     }
 
     closeModal();
@@ -84,7 +84,7 @@ function openModal(container, player = null) {
     container.querySelector("#new-player-first").value = player.first_name;
     container.querySelector("#new-player-last").value = player.last_name;
     container.querySelector("#new-player-email").value = player.email || "";
-    container.querySelector("#new-player-phone").value = player.phone || "";
+    container.querySelector("#new-player-phone").value = player.phone_number || "";
     container.querySelector("#new-player-info").value = player.additional_info || "";
   } else {
     resetModal(container);
