@@ -5,10 +5,22 @@ from fastapi.middleware.cors import CORSMiddleware
 import os
 
 # migration auto au démarrage
+from contextlib import asynccontextmanager
 from alembic import command
 from alembic.config import Config
 alembic_cfg = Config("alembic.ini")
-command.upgrade(alembic_cfg, "head")
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Avant le démarrage
+    try:
+        command.upgrade(alembic_cfg, "head")
+        print("Migrations Alembic appliquées ✅")
+    except Exception as e:
+        print("Erreur migrations Alembic:", e)
+    yield
+    # Après la fermeture (shutdown)
+    print("Application arrêtée")
 
 # --- App FastAPI ---
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -17,7 +29,8 @@ app = FastAPI(
     version="1.0",
     docs_url="/api/docs",
     redoc_url="/api/redoc",
-    openapi_url="/api/openapi.json"
+    openapi_url="/api/openapi.json",
+    lifespan=lifespan
 )
 # pour la prod
 #app = FastAPI(
