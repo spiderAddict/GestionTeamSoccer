@@ -10,12 +10,6 @@ from alembic.config import Config
 alembic_cfg = Config("alembic.ini")
 command.upgrade(alembic_cfg, "head")
 
-from database import engine, Base
-from models import player, match, payment, payment_match_association # <-- IMPORTANT pour que SQLAlchemy connaisse le modèle
-
-# --- Créer la base si elle n'existe pas ---
-Base.metadata.create_all(bind=engine)
-
 # --- App FastAPI ---
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 app = FastAPI(

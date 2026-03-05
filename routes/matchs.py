@@ -17,6 +17,7 @@ class MatchSchema(BaseModel):
     id: str
     date: DateType
     result: str | None = None
+    versus_team: str | None = None
     players: List[str]
 
     model_config = {
@@ -27,6 +28,7 @@ class MatchSchema(BaseModel):
 class MatchCreate(BaseModel):
     date: DateType
     result: str | None = None
+    versus_team: str | None = None
     players: List[str]
 
 # --- CRUD --- 
@@ -47,6 +49,7 @@ def create_match(match: MatchCreate, db: Session = Depends(get_db)):
     db_match = Match(
         date=match.date,
         result=match.result,
+        versus_team=match.versus_team,
         players=match.players
     )
     db.add(db_match)
@@ -76,6 +79,7 @@ def update_match(match_id: str, match: MatchCreate, db: Session = Depends(get_db
 
     db_match.date = match.date
     db_match.result = match.result
+    db_match.versus_team = match.versus_team
     db_match.players = match.players
 
     db.commit()

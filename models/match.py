@@ -14,5 +14,6 @@ class Match(Base):
     )
     date: str = Column(String(10), nullable=False)  # stocké en ISO YYYY-MM-DD
     result: str | None = Column(String(20), nullable=True)
+    versus_team: str | None = Column(String(20), nullable=True)
     players: list = Column(JSON, nullable=False)  # liste des UUIDs des joueurs
     additional_info: str | None = Column(Text, nullable=True)  # facultatif
