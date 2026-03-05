@@ -11,8 +11,7 @@ alembic_cfg = Config("alembic.ini")
 command.upgrade(alembic_cfg, "head")
 
 from database import engine, Base
-import models.player # <-- IMPORTANT pour que SQLAlchemy connaisse le modèle
-import models.match # <-- IMPORTANT pour que SQLAlchemy connaisse le modèle
+from models import player, match, payment, payment_match_association # <-- IMPORTANT pour que SQLAlchemy connaisse le modèle
 
 # --- Créer la base si elle n'existe pas ---
 Base.metadata.create_all(bind=engine)
@@ -40,10 +39,11 @@ app.add_middleware(
 )
 
 # ✅ 1️⃣ Inclure les routes API EN PREMIER
-from routes.players import router as players_router
-from routes.matchs import router as matchs_router
+from routes import players_router, matchs_router, payments_router, version_router
 app.include_router(players_router)
 app.include_router(matchs_router)
+app.include_router(payments_router)
+app.include_router(version_router)
 
 # --- Serve SPA ---
 app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "static")), name="static")
