@@ -1,4 +1,6 @@
 {
+    "git.autofetch": true,
+    "git.autofetchPeriod": 300,
     "sqltools.connections": [
         {
             "previewLimit": 50,
@@ -6,5 +8,5 @@
             "database": "/database/gestion_soccer.db",
             "name": "db"
         }
-    ]
+    ],
 }
