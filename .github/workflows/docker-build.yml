@@ -21,6 +21,8 @@ jobs:
   lint-commit:
     name: Commit Lint
     runs-on: ubuntu-latest
+    outputs:
+      valid: ${{ steps.result.outputs.valid }}
     steps:
       # ✅ IMPORTANT : récupérer tout l'historique
       - uses: actions/checkout@v3
@@ -34,16 +36,28 @@ jobs:
           
       # ✅ Commitlint officiel
       - name: Lint commits
+        id: commitlint
+        continue-on-error: true
         uses: wagoid/commitlint-github-action@v5
         with:
           # configFile: commitlint.config.js
-          failOnErrors: true   # ❌ stoppe le workflow
-          failOnWarnings: false # ⚠️ warnings ne stoppent pas le workflow
+          failOnErrors: true
+          failOnWarnings: false
+      
+      - name: Set output
+        id: result
+        run: |
+          if [ "${{ steps.commitlint.outcome }}" = "success" ]; then
+            echo "valid=true" >> $GITHUB_OUTPUT
+          else
+            echo "valid=false" >> $GITHUB_OUTPUT
+          fi
 
   calculate-version:
     name: Calculate Version
     runs-on: ubuntu-latest
     needs: lint-commit
+    if: needs.lint-commit.outputs.valid == 'true' # ⚡ ne run que si commitlint est passé
     outputs:
       next_version: ${{ steps.get_tag.outputs.tag }}
     steps:
