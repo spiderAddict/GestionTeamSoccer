@@ -1,15 +1,23 @@
 {
-  "name": "Python Codespace",
+  "name": "GestionTeamSoccer Codespace",
   "image": "mcr.microsoft.com/devcontainers/python:3.11",
   "customizations": {
     "vscode": {
       "settings": {
-        "python.defaultInterpreterPath": ".venv/bin/python"
+        // VS Code utilisera automatiquement le venv créé
+        "python.defaultInterpreterPath": "${containerWorkspaceFolder}/.venv/bin/python",
+        "git.autofetch": true,
+        "git.autofetchPeriod": 300,
+        "python.languageServer": "Pylance",
+        "python.analysis.typeCheckingMode": "basic"
       },
       "extensions": [
-        "ms-python.python"
+        "ms-python.python",
+        "ms-python.vscode-pylance"
       ]
-    },
-    "postCreateCommand": "python -m venv .venv && . .venv/bin/activate && pip install -r requirements.txt"
-  }
+    }
+  },
+  "postCreateCommand": "python -m venv .venv && .venv/bin/python -m pip install --upgrade pip && .venv/bin/python -m pip install -r requirements.txt",
+  "forwardPorts": [],
+  "remoteUser": "vscode"
 }

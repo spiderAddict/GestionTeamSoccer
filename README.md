@@ -1,10 +1,12 @@
 # Codespace 
 
 Le conteneur Codespace démarre avec :
-- Extension Python installée par défaut ✅
-- Débogage Python fonctionnel ✅
-- Virtualenv prêt et dépendances installées ✅
-
+- Python 3.11
+- .venv créé automatiquement
+- Dépendances Python installées
+- Débogage Python prêt
+- Git autofetch activé
+- Extensions VS Code installées (Python)
 
 Lors du démarrage de l'application, la migration Alembic est effectuée, l'api est créé
 
