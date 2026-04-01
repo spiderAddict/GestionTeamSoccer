@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
@@ -37,6 +37,28 @@ app = FastAPI(
 #    docs_url=None,
 #    redoc_url=None
 #)
+
+
+# --- LOGS pour le debug si besoin
+import logging
+import sys
+
+# Config logger
+logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
+logger = logging.getLogger("uvicorn.error")
+
+# Middleware pour loguer toutes les requêtes et exceptions
+@app.middleware("http")
+async def log_requests(request: Request, call_next):
+    logger.debug(f"Request: {request.method} {request.url}")
+    try:
+        response = await call_next(request)
+    except Exception as e:
+        logger.exception(f"Exception on {request.method} {request.url}: {e}")
+        raise
+    logger.debug(f"Response status: {response.status_code}")
+    return response
+
 # --- CORS pour le frontend si besoin ---
 app.add_middleware(
     CORSMiddleware,
