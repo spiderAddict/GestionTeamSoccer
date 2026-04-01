@@ -33,4 +33,4 @@ USER appuser
 EXPOSE 5000
 
 # --- Commande par défaut pour démarrer l'application ---
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5000", "--reload"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5000",  "--log-level", "debug"]
