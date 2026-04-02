@@ -10,6 +10,24 @@ Le conteneur Codespace démarre avec :
 
 Lors du démarrage de l'application, la migration Alembic est effectuée, l'api est créé
 
+# Logs
+
+## Uvicorn 
+Uvicorn propose 2 loggers par défaut
+
+- logs requêtes (uvicorn.access => logs automatiques
+- logs serveur (uvicorn.error) => coder les levées d'exceptions
+
+## Résumé
+
+| Besoin                 | Solution              |
+| ---------------------- | --------------------- |
+| Voir les requêtes HTTP | `--access-log`        |
+| Voir les erreurs       | `--log-level debug`   |
+| Logs métier            | logger custom (`app`) |
+| Logs détaillés POST    | middleware            |
+
+
 # Alembic
 ## générer une migration vide
 alembic revision -m "Rendre email nullable sur player"

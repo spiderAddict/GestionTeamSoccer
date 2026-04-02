@@ -1,9 +1,12 @@
 # --- Étape 1 : image de base Python ---
-FROM python:3.12-slim
+FROM python:3.11-slim
 
 # --- Variables d'environnement pour éviter les prompts ---
 ENV PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1
+    PYTHONDONTWRITEBYTECODE=1 \
+    LOG_LEVEL=info \
+    APP_ENV=prod \
+    PORT=5000
 
 # --- Créer le répertoire de travail ---
 WORKDIR /app
@@ -30,7 +33,7 @@ RUN chown -R appuser:appuser /app
 USER appuser
 
 # --- Exposer le port utilisé par FastAPI ---
-EXPOSE 5000
+EXPOSE ${PORT}
 
-# --- Commande par défaut pour démarrer l'application ---
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "5000",  "--log-level", "debug"]
+# --- Commande de lancement ---
+CMD ["python", "main.py"]

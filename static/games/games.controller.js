@@ -1,9 +1,10 @@
 import { getGames, createGame, updateGame, deleteGame } from "./games.api.js";
+import { getPlayers } from "../players/players.api.js";
 import { gamesTemplate } from "./games.template.js";
 
 // Render page
 export async function renderGamesPage(container) {
-  const [games, players] = await Promise.all([getGames(), fetch("/api/players").then(r => r.json())]);
+  const [games, players] = await Promise.all([getGames(), getPlayers()]);
   container.innerHTML = gamesTemplate(games, players);
   attachEvents(container, games, players);
 }
