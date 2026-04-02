@@ -12,7 +12,7 @@ from fastapi.staticfiles import StaticFiles
 # --- Configuration ---
 PORT = int(os.getenv("PORT", 5000))
 APP_ENV = os.environ.get("APP_ENV", "dev")  # dev ou prod
-LOG_LEVEL = os.getenv("LOG_LEVEL", "info")  # par défaut "info"
+LOG_LEVEL = os.getenv("LOG_LEVEL",  "info" if APP_ENV == "prod" else "debug")
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 # --- Logger basique ---
@@ -36,6 +36,8 @@ alembic_cfg = Config(os.path.join(BASE_DIR, "alembic.ini"))
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     logger.info("Démarrage de l'application ⏳")
+    logger.info(f"{'🚀' if APP_ENV == 'prod' else '🐛'} Environnement : {APP_ENV}")
+    logger.info(f"📃 Log level : {LOG_LEVEL}")
 
     # Exécution des migrations avant que le serveur ne démarre
     try:
