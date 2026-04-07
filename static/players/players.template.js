@@ -22,7 +22,7 @@ export function playersTemplate(players) {
           </div>
           <div class="actions player-actions">
             <button class="action-btn" data-id="${p.id}" data-action="edit">✏️</button>
-            <button class="action-btn danger" data-id="${p.id}" data-action="delete">🗑</button>
+            <button class="action-btn danger" data-id="${p.id}" data-action="delete">🗑️</button>
           </div>
         </div>
       `).join("")}
