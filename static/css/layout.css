@@ -2,7 +2,7 @@
   font-family: Arial, sans-serif;
   padding: 0;
   margin: 0;
-  background-color: #f7f7f7;
+  background-color: var(--color-primary);
 }
 
 .mobile-header {
@@ -15,11 +15,47 @@
   border-bottom: 1px solid #eee;
   text-align: center;
   z-index: 10;
+  margin-bottom: 8px
 }
 
-.container-mobile {
-  padding: 12px;
+.card {
+  background: white;
+  padding: 14px;
+  margin-bottom: 8px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
 }
+
+.actions {
+  display: flex;
+  gap: 8px;
+}
+
+.action-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 0.5px solid var(--color-border-secondary);
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-primary);
+}
+
+.action-btn:hover {
+  background: var(--color-background-secondary);
+}
+
+/* variante destructive */
+.action-btn.danger:hover {
+  color: var(--color-text-danger);
+  border-color: var(--color-border-danger);
+  background: var(--color-background-danger);
+}
+
+/* Mobile section */
 
 .fab {
   position: fixed;

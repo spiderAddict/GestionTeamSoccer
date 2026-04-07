@@ -1,3 +1,5 @@
+import { inputField } from '../helpers.js';
+
 export function playersTemplate(players) {
   return `
   <div class="mobile-app">
@@ -8,17 +10,19 @@ export function playersTemplate(players) {
 
     <div class="players-list">
       ${players.map(p => `
-        <div class="player-card" title="${p.additional_info || ''}">
+        <div class="card player-card" title="${p.first_name || ''}">
           <div class="player-info">
-            <strong>${p.first_name}</strong>
-            <span>${p.last_name}</span>
+            <div class="player-name">
+              <strong>${p.first_name}</strong>
+              <span>${p.last_name}</span>
+              <i>${p.additional_info}</i>              
+            </div>
             <span class="player-contact">${p.email ? '📧 ' + p.email : ''}</span>
             <span class="player-contact">${p.phone_number ? '📞 ' + p.phone_number : ''}</span>
           </div>
-
-          <div class="player-actions">
-            <button data-id="${p.id}" data-action="edit">✏️</button>
-            <button data-id="${p.id}" data-action="delete">🗑</button>
+          <div class="actions player-actions">
+            <button class="action-btn" data-id="${p.id}" data-action="edit">✏️</button>
+            <button class="action-btn danger" data-id="${p.id}" data-action="delete">🗑</button>
           </div>
         </div>
       `).join("")}
@@ -35,6 +39,7 @@ export function playersTemplate(players) {
       </header>
       <section class="modal-card-body">
         <input type="hidden" id="modal-player-id">
+          
         <div class="field">
           <label class="label">Prénom *</label>
           <div class="control">

@@ -13,23 +13,37 @@ export function gamesTemplate(games, players) {
           return p ? `${p.first_name} ${p.last_name}` : '';
         }).join(", ");
 
+        // Travailler résultats
+        let butsPour = null
+        let butsContre = null
+        const match = m.result.match(/^(\d{1,2})-(\d{1,2})$/)
+        if (match) {
+          butsPour = parseInt(match[1])
+          butsContre = parseInt(match[2])}
+
         return `
-        <div class="match-card">
-          <div class="match-card-header">
-            <div class="match-info">
-              <strong>${m.date}</strong>
-              ${m.versus_team ? `<span>Adversaire: ${m.versus_team}</span>` : ''}
-              ${m.result ? `<span>Résultat: ${m.result}</span>` : ''}
-            </div>
-            <div class="match-actions">
-              <button data-id="${m.id}" data-action="edit">✏️</button>
-              <button data-id="${m.id}" data-action="delete">🗑️</button>
-            </div>
-          </div>
-          <div class="match-players-list">
-            ${matchPlayers.split(", ").map(name => `<span class="player-badge">${name}</span>`).join("")}
-          </div>  
-        </div>`;
+          <div class="card match-card">
+              <div>
+                <div class="match-info">
+                  <strong>📅 ${m.date}</strong>
+                  ${m.versus_team ? `<div class="match-versus-team">${m.versus_team}</div>` : ''}
+                  ${butsPour
+                    ? butsPour == butsContre 
+                      ? `<div class="score"><div class="score-part">${butsPour}</div><div class="score-versus-sign">VS</div><div class="score-part">${butsContre}</div></div>`
+                      : butsPour > butsContre
+                        ? `<div class="score"><div class="score-part winning">${butsPour}</div><div class="score-versus-sign">VS</div><div class="score-part">${butsContre}</div></div>`
+                        : `<div class="score"><div class="score-part">${butsPour}</div><div class="score-versus-sign">VS</div><div class="score-part winning">${butsContre}</div></div>`
+                    : ''}
+                </div>
+                <div class="match-players-list">
+                  ${matchPlayers.split(", ").map(name => `<span class="player-badge">${name}</span>`).join("")}
+                </div>
+              </div>
+              <div class="actions match-actions">
+                <button class="action-btn" data-id="${m.id}" data-action="edit">✏️</button>
+                <button class="action-btn danger" data-id="${m.id}" data-action="delete">🗑️</button>
+              </div>
+          </div>`;
       }).join("")}
     </div>
 
@@ -48,7 +62,7 @@ export function gamesTemplate(games, players) {
           <input type="hidden" id="modal-match-id">
 
           <div class="field">
-            <label class="label">Date *</label>
+            <label class="label">📅 Date *</label>
             <div class="control">
               <input class="input" type="date" id="match-date" required>
             </div>
