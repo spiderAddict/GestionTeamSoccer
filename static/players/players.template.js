@@ -1,4 +1,4 @@
-import { inputField } from '../helpers.js';
+import { inputField, textareaField } from '../helpers.js';
 
 export function playersTemplate(players) {
   return `
@@ -39,40 +39,11 @@ export function playersTemplate(players) {
       </header>
       <section class="modal-card-body">
         <input type="hidden" id="modal-player-id">
-          
-        <div class="field">
-          <label class="label">Prénom *</label>
-          <div class="control">
-            <input class="input" type="text" id="new-player-first" required>
-          </div>
-          <p class="help is-danger" id="error-last-name" style="display:none;">
-            Le prénom est obligatoire
-          </p>
-        </div>
-        <div class="field">
-          <label class="label">Nom</label>
-          <div class="control">
-            <input class="input" type="text" id="new-player-last">
-          </div>
-        </div>
-        <div class="field">
-          <label class="label">Email</label>
-          <div class="control">
-            <input class="input" type="email" id="new-player-email">
-          </div>
-        </div>
-        <div class="field">
-          <label class="label">Téléphone</label>
-          <div class="control">
-            <input class="input" type="tel" id="new-player-phone">
-          </div>
-        </div>
-        <div class="field">
-          <label class="label">Additional info</label>
-          <div class="control">
-            <textarea class="textarea" id="new-player-info"></textarea>
-          </div>
-        </div>
+        ${inputField("Prénom *", "text", "new-player-first", true, "Le prénom est obligatoire")}
+        ${inputField("Nom", "text", "new-player-last")}
+        ${inputField("Email", "email", "new-player-email")}
+        ${inputField("Téléphone", "tel", "new-player-phone")}
+        ${textareaField("Additional info", "new-player-info")}
       </section>
       <footer class="modal-card-foot">
         <button class="button is-success" id="save-new-player">Ajouter</button>

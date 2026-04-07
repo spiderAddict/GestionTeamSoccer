@@ -1,5 +1,6 @@
 import { getPlayers, createPlayer, updatePlayer, deletePlayer } from "./players.api.js";
 import { playersTemplate } from "./players.template.js";
+import { showError, hideError } from "../helpers.js";
 
 // Main render function
 export async function renderPlayersPage(container) {
@@ -29,20 +30,22 @@ function attachEvents(container, players) {
   // ---------- Save player (add or edit) ----------
   saveBtn.onclick = async () => {
     const id = container.querySelector("#modal-player-id").value;
-    const first = container.querySelector("#new-player-first").value.trim();
+    const firstNameElement = document.getElementById("new-player-first");
+    const first = firstNameElement.value.trim();
     const last = container.querySelector("#new-player-last").value.trim();
     const email = container.querySelector("#new-player-email").value.trim();
     const phone_number = container.querySelector("#new-player-phone").value.trim();
     const info = container.querySelector("#new-player-info").value.trim();
 
-    const error = document.getElementById("error-last-name");
-
+    // Validation des données
     if (!first) {
-      error.style.display = "block";
+      showError(firstNameElement);
       return;
+    } else {
+      hideError(firstNameElement);
     }
-    error.style.display = "none";
 
+    // Update/Create
     if (id) {
       await updatePlayer(id, { first_name: first, last_name: last, email, phone_number, additional_info: info });
     } else {
