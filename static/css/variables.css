@@ -1,0 +1,18 @@
+:root {
+    /* Couleurs principales */
+    --color-primary: #f7f7f7;
+    --color-border-primary:black;
+    --color-background-primary:#ff7832;
+
+    /* Couleurs secondaires */    
+    --color-border-secondary:black;
+    --color-background-secondary:black;
+
+    /* Couleurs neutres / texte */
+    --color-text-primary: black;
+    --color-text-secondary: white;
+
+    --color-text-danger: white;
+    --color-border-danger:black;
+    --color-background-danger:rgba(255, 0, 0, 0.733);
+}

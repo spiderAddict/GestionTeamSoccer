@@ -27,7 +27,7 @@ if not logger.hasHandlers():
     handler = logging.StreamHandler(sys.stdout)
     handler.setFormatter(logging.Formatter("%(asctime)s - %(levelname)s - %(name)s - %(message)s"))
     logger.addHandler(handler)
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.DEBUG if LOG_LEVEL == "debug" else logging.INFO)
 logger.propagate = False
 
 # --- Alembic ---

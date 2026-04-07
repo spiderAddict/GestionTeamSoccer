@@ -1,31 +1,39 @@
-/* Header de la carte */
-.match-card-header {
+.match-card {
+  background: rgb(236, 236, 236);
   display: flex;
-  justify-content: space-between; /* infos à gauche, actions à droite */
+  justify-content: space-between;
   align-items: center;
-  margin-bottom: 0.5rem;
 }
 
-/* Match info côté gauche */
-.match-info {
+.match-versus-team {
+  font-size: 14px;
+}
+
+.score {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
+  align-items: center;
+  position: relative;
 }
 
-/* Boutons d'action côté droit */
-.match-actions {
-  display: flex;
-  gap: 0.5rem;
+.score-part {
+  font-size: 16px;
+  color: #fff;
+  width: 24px;
+  height: 24px;
+  background-color: #000;
+  text-align: center;
+  z-index: 1;
 }
 
-.match-actions button {
-  padding: 0.3rem 0.5rem;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 1rem;
-  margin-left: 0.5rem;
+.score-part.winning {
+  background-color: var(--color-background-primary);
+}
+
+.score-versus-sign {
+  font-size: 16px;
+  color: var(--mainColor);
+  margin: 0 10px;
+  z-index: 1;
 }
 
 /* Container pour la liste de joueurs dans une carte */
@@ -36,10 +44,10 @@
   margin-top: 0.5rem;
 }
 
-/* Badge joueur bleu */
+/* Badge joueur orange */
 .player-badge {
-  background-color: #1e90ff; /* bleu vif */
-  color: white;
+  background-color: var(--color-background-primary);
+  color: var(--color-text-secondary);
   padding: 0.3rem 0.6rem;
   border-radius: 12px;
   font-size: 0.8rem;
