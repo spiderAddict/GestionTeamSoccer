@@ -7,11 +7,14 @@ export function gamesTemplate(games, players) {
     </header>
 
     <div class="games-list">
-      ${games.map(m => {
-        const matchPlayers = m.players.map(id => {
-          const p = players.find(pl => pl.id === id);
-          return p ? `${p.first_name} ${p.last_name}` : '';
-        }).join(", ");
+      ${games
+        .sort((a, b) => new Date(b.date) - new Date(a.date)) // tri décroissant sur la date du match
+        .map(m => {
+          const matchPlayers = m.players.map(id => {
+            const p = players.find(pl => pl.id === id);
+            return p ? `${p.first_name} ${p.last_name}` : '';
+          })
+        .join(", ");
 
         // Travailler résultats
         let butsPour = null
@@ -59,14 +62,14 @@ export function gamesTemplate(games, players) {
           <button class="delete" aria-label="close" id="close-modal"></button>
         </header>
         <section class="modal-card-body">
-          <input type="hidden" id="modal-match-id">
+          <input type="hidden" id="modal-match-id">          
 
           <div class="field">
             <label class="label">📅 Date *</label>
             <div class="control">
               <input class="input" type="date" id="match-date" required>
             </div>
-          </div>
+          </div>   
 
           <div class="field">
             <label class="label">Résultat</label>
