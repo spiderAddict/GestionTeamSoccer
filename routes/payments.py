@@ -1,8 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from typing import List
 from database import get_db
-from models import Payment, Match
+from models import Payment, Player, Match
 from sqlalchemy.orm import Session
+from sqlalchemy import exists
 from pydantic import BaseModel
 from datetime import datetime
 
@@ -66,6 +67,21 @@ def create_payment(payment: PaymentCreate, db: Session = Depends(get_db)):
     matches = db.query(Match).filter(Match.id.in_(payment.match_ids)).all()
     if len(matches) != len(payment.match_ids):
         raise HTTPException(status_code=400, detail="One or more matches not found")
+
+    # Vérifier que les payers et receivers existent
+    payer_exists = db.query(
+        exists().where(Player.id == payment.payer_id)
+    ).scalar()
+
+    if not payer_exists:
+        raise HTTPException(status_code=400, detail="Payer not found")
+
+    receiver_exists = db.query(
+        exists().where(Player.id == payment.receiver_id)
+    ).scalar()
+
+    if not receiver_exists :
+        raise HTTPException(status_code=400, detail="Receiver not found")    
 
     db_payment = Payment(
         payer_id=payment.payer_id,
