@@ -1,6 +1,6 @@
 import uuid
-from datetime import date
-from sqlalchemy import Date, Column, String, Integer, ForeignKey, CheckConstraint, Table
+from datetime import datetime
+from sqlalchemy import DateTime, Column, String, Integer, ForeignKey, CheckConstraint, Table
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 from database import Base
@@ -34,7 +34,7 @@ class Payment(Base):
         nullable=False
     )
     number_of_matches_paid: Mapped[int] = mapped_column(Integer, nullable=False)
-    created_at: Mapped[date] = mapped_column(Date, server_default=func.now(), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
     __table_args__ = (
         CheckConstraint("payer_id <> receiver_id", name="check_payer_not_receiver"),
