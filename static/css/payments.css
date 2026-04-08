@@ -1,0 +1,30 @@
+.payment-card {
+  background: rgb(236, 236, 236);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.payment-info {
+  font-size: 16px;
+}
+
+.payment-date {
+  font-weight: bold;
+  color: #333;
+}
+
+.payment-parties {
+  font-size: 14px;
+  color: #666;
+  margin: 4px 0;
+}
+
+.payment-matches {
+  font-size: 13px;
+  color: #555;
+}
+
+.payments-list {
+  padding-bottom: 100px; /* fab + nav + marge */
+}

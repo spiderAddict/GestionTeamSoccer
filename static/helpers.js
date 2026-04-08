@@ -36,3 +36,20 @@ export function textareaField(label, id) {
     </div>
   `;
 }
+
+export function selectField(label, id, options, required = false, errorMsg = "", defaultValue = "") {
+  return `
+    <div class="field">
+      <label class="label">${label}</label>
+      <div class="control">
+        <div class="select">
+          <select id="${id}" ${required ? "required" : ""}>
+            <option value="">-- Sélectionner --</option>
+            ${options.map(opt => `<option value="${opt.value}" ${opt.value === defaultValue ? 'selected' : ''}>${opt.label}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+      ${errorMsg ? `<p class="help is-danger is-hidden">${errorMsg}</p>` : ''}
+    </div>
+  `;
+}
