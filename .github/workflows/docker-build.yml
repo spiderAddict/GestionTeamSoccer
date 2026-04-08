@@ -70,14 +70,21 @@ jobs:
           node-version: '20'
 
       - name: Install semantic-release deps
-        run: npm install semantic-release @semantic-release/commit-analyzer @semantic-release/release-notes-generator @semantic-release/github
+        run: |
+          npm install \
+            semantic-release \
+            @semantic-release/commit-analyzer \
+            @semantic-release/release-notes-generator \
+            @semantic-release/github \
+            conventional-changelog-conventionalcommits
 
       - name: Check if release is needed
         id: check_release
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          OUTPUT=$(npx semantic-release --dry-run 2>&1)
+          set -o pipefail
+          OUTPUT=$(npx semantic-release --dry-run --debug 2>&1 | tee /dev/stderr)
       
           if echo "$OUTPUT" | grep -q "The next release version is"; then
             echo "released=true" >> $GITHUB_OUTPUT

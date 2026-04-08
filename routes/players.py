@@ -13,8 +13,8 @@ router = APIRouter(
 # Schema Pydantic pour requêtes/réponses
 class PlayerSchema(BaseModel):
     id: str
-    first_name: str
-    last_name: str | None = None
+    name: str
+    surname: str | None = None
     email: str | None = None
     phone_number: str | None = None
     additional_info: str | None = None
@@ -26,8 +26,8 @@ class PlayerSchema(BaseModel):
     
 # --- Schéma utilisé pour la création (pas d'id) ---
 class PlayerCreate(BaseModel):
-    first_name: str
-    last_name: str | None = None
+    name: str
+    surname: str | None = None
     email: str | None = None
     phone_number: str | None = None
     additional_info: str | None = None
@@ -41,8 +41,8 @@ def get_players(db: Session = Depends(get_db)):
 @router.post("", response_model=PlayerSchema)
 def create_player(player: PlayerCreate, db: Session = Depends(get_db)):
     db_player = Player(
-        first_name=player.first_name,
-        last_name=player.last_name,
+        name=player.name,
+        surname=player.surname,
         email=player.email,
         phone_number=player.phone_number,
         additional_info=player.additional_info)
@@ -63,8 +63,8 @@ def update_player(player_id: str, player: PlayerCreate, db: Session = Depends(ge
     db_player = db.query(Player).filter(Player.id == player_id).first()
     if not db_player:
         raise HTTPException(status_code=404, detail="Player not found")
-    db_player.first_name = player.first_name
-    db_player.last_name = player.last_name
+    db_player.name = player.name
+    db_player.surname = player.surname
     db_player.email = player.email
     db_player.phone_number = player.phone_number
     db_player.additional_info = player.additional_info

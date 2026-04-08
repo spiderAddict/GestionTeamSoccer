@@ -47,9 +47,9 @@ function attachEvents(container, players) {
 
     // Update/Create
     if (id) {
-      await updatePlayer(id, { first_name: first, last_name: last, email, phone_number, additional_info: info });
+      await updatePlayer(id, { name: first, surname: last, email, phone_number, additional_info: info });
     } else {
-      await createPlayer({ first_name: first, last_name: last, email, phone_number, additional_info: info });
+      await createPlayer({ name: first, surname: last, email, phone_number, additional_info: info });
     }
 
     closeModal();
@@ -88,8 +88,8 @@ function openModal(container, player = null) {
   if (player) {
     // Pre-fill for edit
     container.querySelector("#modal-player-id").value = player.id;
-    container.querySelector("#new-player-first").value = player.first_name;
-    container.querySelector("#new-player-last").value = player.last_name;
+    container.querySelector("#new-player-first").value = player.name;
+    container.querySelector("#new-player-last").value = player.surname;
     container.querySelector("#new-player-email").value = player.email || "";
     container.querySelector("#new-player-phone").value = player.phone_number || "";
     container.querySelector("#new-player-info").value = player.additional_info || "";

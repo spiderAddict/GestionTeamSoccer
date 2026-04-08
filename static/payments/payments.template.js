@@ -1,7 +1,7 @@
 import { inputField, selectField } from '../helpers.js';
 
 export function paymentsTemplate(payments, players) {
-  const pierre = players.find(p => p.first_name.toLowerCase() === 'pierre');
+  const pierre = players.find(p => p.name.toLowerCase() === 'pierre');
   const defaultReceiverId = pierre ? pierre.id : '';
 
   return `
@@ -16,7 +16,7 @@ export function paymentsTemplate(payments, players) {
         <div class="card payment-card">
           <div class="payment-info">
             <div class="payment-date">${new Date(p.created_at).toLocaleDateString('fr-FR')}</div>
-            <div class="payment-parties">${players.find(pl => pl.id === p.payer_id).first_name} ⇒ ${players.find(pl => pl.id === p.receiver_id).first_name}</div>
+            <div class="payment-parties">${players.find(pl => pl.id === p.payer_id).name} ⇒ ${players.find(pl => pl.id === p.receiver_id).name}</div>
             ${p.number_of_matches_paid > 1 ? `<div class="payment-matches">${p.number_of_matches_paid} matchs</div>` : ''}
           </div>
           <div class="actions payment-actions">
@@ -36,8 +36,8 @@ export function paymentsTemplate(payments, players) {
         <button class="delete" aria-label="close" id="close-modal"></button>
       </header>
       <section class="modal-card-body">
-        ${selectField("Payeur *", "new-payment-payer", players.map(p => ({ value: p.id, label: `${p.first_name} ${p.last_name || ''}`.trim() })), true, "Le payeur est obligatoire")}
-        ${selectField("Receveur *", "new-payment-receiver", players.map(p => ({ value: p.id, label: `${p.first_name} ${p.last_name || ''}`.trim() })), true, "Le receveur est obligatoire", defaultReceiverId)}
+        ${selectField("Payeur *", "new-payment-payer", players.map(p => ({ value: p.id, label: `${p.name} ${p.surname || ''}`.trim() })), true, "Le payeur est obligatoire")}
+        ${selectField("Receveur *", "new-payment-receiver", players.map(p => ({ value: p.id, label: `${p.name} ${p.surname || ''}`.trim() })), true, "Le receveur est obligatoire", defaultReceiverId)}
         ${inputField("Nombre de matchs", "number", "new-payment-matches", false, "", "1")}
       </section>
       <footer class="modal-card-foot">

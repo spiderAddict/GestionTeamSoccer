@@ -13,8 +13,8 @@ class Player(Base):
         default=lambda: str(uuid.uuid4()), 
         nullable=False
     )
-    first_name: Mapped[str] = mapped_column(String(50), nullable=False)
-    last_name: Mapped[str | None] = mapped_column(String(50), nullable=True)
+    name: Mapped[str] = mapped_column("name", String(50), nullable=False)
+    surname: Mapped[str | None] = mapped_column("surname", String(50), nullable=True)
     email: Mapped[str | None] = mapped_column(String(100), nullable=True)
     phone_number: Mapped[str | None]  = mapped_column(String(15), nullable=True)
     additional_info: Mapped[str | None] = mapped_column(Text, nullable=True)

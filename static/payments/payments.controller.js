@@ -81,7 +81,7 @@ function openModal(container, players) {
   modal.classList.add("is-active");
 
   // Set defaults
-  const pierre = players.find(p => p.first_name.toLowerCase() === 'pierre');
+  const pierre = players.find(p => p.name.toLowerCase() === 'pierre');
   if (pierre) {
     container.querySelector("#new-payment-receiver").value = pierre.id;
   }

@@ -10,11 +10,11 @@ export function playersTemplate(players) {
 
     <div class="players-list">
       ${players.map(p => `
-        <div class="card player-card" title="${p.first_name || ''}">
+        <div class="card player-card" title="${p.name || ''}">
           <div class="player-info">
             <div class="player-name">
-              <strong>${p.first_name}</strong>
-              <span>${p.last_name}</span>
+              <strong>${p.name}</strong>
+              <span>${p.surname}</span>
               <i>${p.additional_info}</i>              
             </div>
             <span class="player-contact">${p.email ? '📧 ' + p.email : ''}</span>
@@ -39,11 +39,11 @@ export function playersTemplate(players) {
       </header>
       <section class="modal-card-body">
         <input type="hidden" id="modal-player-id">
-        ${inputField("Prénom *", "text", "new-player-first", true, "Le prénom est obligatoire")}
-        ${inputField("Nom", "text", "new-player-last")}
+        ${inputField("Nom *", "text", "new-player-first", true, "Le prénom est obligatoire")}
+        ${inputField("Surnom (remplace le nom à l'affichage)", "text", "new-player-last")}
         ${inputField("Email", "email", "new-player-email")}
         ${inputField("Téléphone", "tel", "new-player-phone")}
-        ${textareaField("Additional info", "new-player-info")}
+        ${textareaField("Informations supplémentaires", "new-player-info")}
       </section>
       <footer class="modal-card-foot">
         <button class="button is-success" id="save-new-player">Ajouter</button>

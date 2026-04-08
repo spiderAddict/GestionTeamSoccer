@@ -12,7 +12,7 @@ export function gamesTemplate(games, players) {
         .map(m => {
           const matchPlayers = m.players.map(id => {
             const p = players.find(pl => pl.id === id);
-            return p ? `${p.first_name} ${p.last_name}` : '';
+            return p ? `${p.name} ${p.surname || ''}`.trim() : '';
           })
         .join(", ");
 
@@ -91,7 +91,7 @@ export function gamesTemplate(games, players) {
               ${players.map(p => `
                 <label class="checkbox">
                   <input type="checkbox" value="${p.id}" class="match-player-checkbox">
-                  ${p.first_name} ${p.last_name}
+                  ${p.name} ${p.surname || ''}
                 </label>
               `).join("")}
             </div>
