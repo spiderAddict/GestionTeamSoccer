@@ -69,9 +69,12 @@ function attachEvents(container, games, players) {
   // Delete buttons
   container.querySelectorAll("button[data-action='delete']").forEach(btn => {
     btn.onclick = async () => {
-      const id = btn.dataset.id;
-      await deleteGame(id);
-      await rendergamesPage(container);
+      const id = btn.dataset.id;// Show confirmation dialog
+      const confirmed = confirm("Êtes-vous sûr(e) de vouloir supprimer ce match ? Cette action ne peut pas être annulée.");
+      if (confirmed) {
+        await deleteGame(id);
+        await renderGamesPage(container);
+      }
     };
   });
 }

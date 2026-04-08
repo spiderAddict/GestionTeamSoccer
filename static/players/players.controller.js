@@ -70,8 +70,12 @@ function attachEvents(container, players) {
   container.querySelectorAll("button[data-action='delete']").forEach(btn => {
     btn.onclick = async () => {
       const id = btn.dataset.id;
-      await deletePlayer(id);
-      await renderPlayersPage(container);
+      // Show confirmation dialog
+      const confirmed = confirm("Êtes-vous sûr(e) de vouloir supprimer ce joueur ? Cette action ne peut pas être annulée.");
+      if (confirmed) {
+        await deletePlayer(id);
+        await renderPlayersPage(container);
+      }
     };
   });
 }
