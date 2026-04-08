@@ -16,7 +16,7 @@ export function paymentsTemplate(payments, players) {
         <div class="card payment-card">
           <div class="payment-info">
             <div class="payment-date">${new Date(p.created_at).toLocaleDateString('fr-FR')}</div>
-            <div class="payment-parties">${p.payer_name} ⇒ ${p.receiver_name}</div>
+            <div class="payment-parties">${players.find(pl => pl.id === p.payer_id).first_name} ⇒ ${players.find(pl => pl.id === p.receiver_id).first_name}</div>
             ${p.number_of_matches_paid > 1 ? `<div class="payment-matches">${p.number_of_matches_paid} matchs</div>` : ''}
           </div>
           <div class="actions payment-actions">
