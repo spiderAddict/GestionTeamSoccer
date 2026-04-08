@@ -28,7 +28,7 @@ export function gamesTemplate(games, players) {
           <div class="card match-card">
               <div>
                 <div class="match-info">
-                  <strong>📅 ${m.date}</strong>
+                  <div class="match-date">📅 ${m.date}</div>
                   ${m.versus_team ? `<div class="match-versus-team">${m.versus_team}</div>` : ''}
                   ${butsPour
                     ? butsPour == butsContre 

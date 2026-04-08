@@ -5,8 +5,20 @@
   align-items: center;
 }
 
+.match-info {
+  font-family: Pressura;
+}
+
+.match-date {
+  font-family: Tahoma;
+  font-size: 18px;
+  font-weight: 400;
+}
+
 .match-versus-team {
   font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
 .score {
