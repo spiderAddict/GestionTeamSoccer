@@ -15,7 +15,7 @@ router = APIRouter(
 # --- Schéma Pydantic pour requêtes/réponses ---
 class MatchSchema(BaseModel):
     id: str
-    date: DateType
+    date: str
     result: str | None = None
     versus_team: str | None = None
     players: List[str]
@@ -26,7 +26,7 @@ class MatchSchema(BaseModel):
 
 # --- Schéma pour création / édition ---
 class MatchCreate(BaseModel):
-    date: DateType
+    date: str
     result: str | None = None
     versus_team: str | None = None
     players: List[str]

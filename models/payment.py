@@ -1,6 +1,7 @@
 import uuid
-from sqlalchemy import Column, String, Integer, DateTime, ForeignKey, CheckConstraint, Table
-from sqlalchemy.orm import relationship
+from datetime import date
+from sqlalchemy import Date, Column, String, Integer, ForeignKey, CheckConstraint, Table
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy.sql import func
 from database import Base
 
@@ -13,26 +14,27 @@ payment_match_association = Table(
 )
 
 class Payment(Base):
+    
     __tablename__ = "payment"
 
-    id: str = Column(
+    id: Mapped[str] = mapped_column(
         String(36),
         primary_key=True,
         default=lambda: str(uuid.uuid4()),
         nullable=False
     )
-    payer_id: str = Column(
+    payer_id: Mapped[str] = mapped_column(
         String(36),
         ForeignKey("player.id", ondelete="CASCADE"),
         nullable=False
     )
-    receiver_id: str = Column(
+    receiver_id: Mapped[str] = mapped_column(
         String(36),
         ForeignKey("player.id", ondelete="CASCADE"),
         nullable=False
     )
-    number_of_matches_paid: int = Column(Integer, nullable=False)
-    created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    number_of_matches_paid: Mapped[int] = mapped_column(Integer, nullable=False)
+    created_at: Mapped[date] = mapped_column(Date, server_default=func.now(), nullable=False)
 
     __table_args__ = (
         CheckConstraint("payer_id <> receiver_id", name="check_payer_not_receiver"),

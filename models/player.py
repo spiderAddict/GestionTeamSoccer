@@ -1,19 +1,20 @@
 import uuid
-from sqlalchemy import Column, Text, String
+from sqlalchemy import Text, String
+from sqlalchemy.orm import Mapped, mapped_column
 from database import Base
 
 class Player(Base):
 
     __tablename__ = "player"
 
-    id: str = Column(
+    id: Mapped[str] = mapped_column(
         String(36),
         primary_key=True,
         default=lambda: str(uuid.uuid4()), 
         nullable=False
     )
-    first_name: str = Column(String(50), nullable=False)
-    last_name: str = Column(String(50), nullable=True)
-    email: str | None = Column(String(100), nullable=True)
-    phone_number: str | None  = Column(String(15), nullable=True)
-    additional_info: str | None = Column(Text, nullable=True)
+    first_name: Mapped[str] = mapped_column(String(50), nullable=False)
+    last_name: Mapped[str | None] = mapped_column(String(50), nullable=True)
+    email: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    phone_number: Mapped[str | None]  = mapped_column(String(15), nullable=True)
+    additional_info: Mapped[str | None] = mapped_column(Text, nullable=True)

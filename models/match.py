@@ -1,19 +1,21 @@
 import uuid
-from sqlalchemy import Column, String, Date, Text
+from sqlalchemy import String, Text
+from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.dialects.postgresql import JSON
 from database import Base
 
 class Match(Base):
+
     __tablename__ = "match"
 
-    id: str = Column(
+    id: Mapped[str] = mapped_column(
         String(36),
         primary_key=True,
         default=lambda: str(uuid.uuid4()),
         nullable=False
     )
-    date: str = Column(String(10), nullable=False)  # stocké en ISO YYYY-MM-DD
-    result: str | None = Column(String(20), nullable=True)
-    versus_team: str | None = Column(String(20), nullable=True)
-    players: list = Column(JSON, nullable=False)  # liste des UUIDs des joueurs
-    additional_info: str | None = Column(Text, nullable=True)  # facultatif
+    date: Mapped[str] = mapped_column(String(10), nullable=False)  # stocké en ISO YYYY-MM-DD
+    result: Mapped[str | None] = mapped_column(String(20), nullable=True)
+    versus_team: Mapped[str | None] = mapped_column(String(20), nullable=True)
+    players: Mapped[list] = mapped_column(JSON, nullable=False)  # liste des UUIDs des joueurs
+    additional_info: Mapped[str | None] = mapped_column(Text, nullable=True)  # facultatif
