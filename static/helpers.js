@@ -53,3 +53,8 @@ export function selectField(label, id, options, required = false, errorMsg = "",
     </div>
   `;
 }
+
+export function displayPlayerName(player) {
+  if (!player) return '';
+  return player.surname ?? player.name;
+}

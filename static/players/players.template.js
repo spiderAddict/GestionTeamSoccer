@@ -1,4 +1,4 @@
-import { inputField, textareaField } from '../helpers.js';
+import { inputField, textareaField, displayPlayerName } from '../helpers.js';
 
 export function playersTemplate(players) {
   return `
@@ -13,10 +13,9 @@ export function playersTemplate(players) {
         <div class="card player-card" title="${p.name || ''}">
           <div class="player-info">
             <div class="player-name">
-              <strong>${p.name}</strong>
-              <span>${p.surname}</span>
-              <i>${p.additional_info}</i>              
+              <strong>${displayPlayerName(p)}</strong>
             </div>
+            <i>${p.additional_info ? ' ' + p.additional_info : ''}</i>
             <span class="player-contact">${p.email ? '📧 ' + p.email : ''}</span>
             <span class="player-contact">${p.phone_number ? '📞 ' + p.phone_number : ''}</span>
           </div>
@@ -40,7 +39,7 @@ export function playersTemplate(players) {
       <section class="modal-card-body">
         <input type="hidden" id="modal-player-id">
         ${inputField("Nom *", "text", "new-player-first", true, "Le prénom est obligatoire")}
-        ${inputField("Surnom (remplace le nom à l'affichage)", "text", "new-player-last")}
+        ${inputField("Surnom (remplace le nom à l'affichage)", "text", "new-player-surname")}
         ${inputField("Email", "email", "new-player-email")}
         ${inputField("Téléphone", "tel", "new-player-phone")}
         ${textareaField("Informations supplémentaires", "new-player-info")}

@@ -1,3 +1,5 @@
+import { displayPlayerName } from '../helpers.js';
+
 export function gamesTemplate(games, players) {
   return `
   <div class="mobile-app">
@@ -39,7 +41,7 @@ export function gamesTemplate(games, players) {
                     : ''}
                 </div>
                 <div class="match-players-list">
-                  ${matchPlayers.split(", ").map(name => `<span class="player-badge">${name}</span>`).join("")}
+                  ${matchPlayers.split(", ").map(p => `<span class="player-badge">${displayPlayerName(p)}</span>`).join("")}
                 </div>
               </div>
               <div class="actions match-actions">

@@ -1,4 +1,4 @@
-import { inputField, selectField } from '../helpers.js';
+import { inputField, selectField, displayPlayerName } from '../helpers.js';
 
 export function paymentsTemplate(payments, players) {
   const pierre = players.find(p => p.name.toLowerCase() === 'pierre');
@@ -36,8 +36,8 @@ export function paymentsTemplate(payments, players) {
         <button class="delete" aria-label="close" id="close-modal"></button>
       </header>
       <section class="modal-card-body">
-        ${selectField("Payeur *", "new-payment-payer", players.map(p => ({ value: p.id, label: `${p.name} ${p.surname || ''}`.trim() })), true, "Le payeur est obligatoire")}
-        ${selectField("Receveur *", "new-payment-receiver", players.map(p => ({ value: p.id, label: `${p.name} ${p.surname || ''}`.trim() })), true, "Le receveur est obligatoire", defaultReceiverId)}
+        ${selectField("Payeur *", "new-payment-payer", players.map(p => ({ value: p.id, label: displayPlayerName(p) })), true, "Le payeur est obligatoire")}
+        ${selectField("Receveur *", "new-payment-receiver", players.map(p => ({ value: p.id, label: displayPlayerName(p) })), true, "Le receveur est obligatoire", defaultReceiverId)}
         ${inputField("Nombre de matchs", "number", "new-payment-matches", false, "", "1")}
       </section>
       <footer class="modal-card-foot">
