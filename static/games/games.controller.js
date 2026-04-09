@@ -29,8 +29,8 @@ function attachEvents(container, games, players) {
   saveBtn.onclick = async () => {
     const id = container.querySelector("#modal-match-id").value;
     const date = container.querySelector("#match-date").value;
-    const result = container.querySelector("#match-result").value.trim();
-    const versus_team = container.querySelector("#match-opponent").value.trim();
+    const result = container.querySelector("#match-result").value.trim() || null;
+    const versus_team = container.querySelector("#match-opponent").value.trim() || null;
     const selectedPlayers = Array.from(container.querySelectorAll(".match-player-checkbox:checked"))
       .map(cb => cb.value);
 
@@ -89,7 +89,6 @@ function openModal(container, players, match = null) {
   const versusTeamInput = container.querySelector("#match-opponent");
   const checkboxes = container.querySelectorAll(".match-player-checkbox");
 
-    console.log("test");
   if (match) {
     idInput.value = match.id;
     dateInput.value = match.date;

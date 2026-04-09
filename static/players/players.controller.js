@@ -32,10 +32,10 @@ function attachEvents(container, players) {
     const id = container.querySelector("#modal-player-id").value;
     const firstNameElement = document.getElementById("new-player-first");
     const first = firstNameElement.value.trim();
-    const last = container.querySelector("#new-player-last").value.trim();
-    const email = container.querySelector("#new-player-email").value.trim();
-    const phone_number = container.querySelector("#new-player-phone").value.trim();
-    const info = container.querySelector("#new-player-info").value.trim();
+    const surname = container.querySelector("#new-player-surname").value.trim() || null;
+    const email = container.querySelector("#new-player-email").value.trim() || null;
+    const phone_number = container.querySelector("#new-player-phone").value.trim() || null;
+    const info = container.querySelector("#new-player-info").value.trim() || null;
 
     // Validation des données
     if (!first) {
@@ -47,9 +47,9 @@ function attachEvents(container, players) {
 
     // Update/Create
     if (id) {
-      await updatePlayer(id, { name: first, surname: last, email, phone_number, additional_info: info });
+      await updatePlayer(id, { name: first, surname, email, phone_number, additional_info: info });
     } else {
-      await createPlayer({ name: first, surname: last, email, phone_number, additional_info: info });
+      await createPlayer({ name: first, surname, email, phone_number, additional_info: info });
     }
 
     closeModal();
@@ -89,7 +89,7 @@ function openModal(container, player = null) {
     // Pre-fill for edit
     container.querySelector("#modal-player-id").value = player.id;
     container.querySelector("#new-player-first").value = player.name;
-    container.querySelector("#new-player-last").value = player.surname;
+    container.querySelector("#new-player-surname").value = player.surname;
     container.querySelector("#new-player-email").value = player.email || "";
     container.querySelector("#new-player-phone").value = player.phone_number || "";
     container.querySelector("#new-player-info").value = player.additional_info || "";
@@ -102,7 +102,7 @@ function openModal(container, player = null) {
 function resetModal(container) {
   container.querySelector("#modal-player-id").value = "";
   container.querySelector("#new-player-first").value = "";
-  container.querySelector("#new-player-last").value = "";
+  container.querySelector("#new-player-surname").value = "";
   container.querySelector("#new-player-email").value = "";
   container.querySelector("#new-player-phone").value = "";
   container.querySelector("#new-player-info").value = "";
