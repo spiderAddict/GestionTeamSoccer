@@ -1,14 +1,12 @@
 .mobile-app {
-  font-family: Arial, sans-serif;
   padding: 0;
   margin: 0;
-  background-color: var(--color-primary);
 }
 
 .mobile-header {
   position: sticky;
   top: 0;
-  background: white;
+  background: var(--color-primary);
   padding: 16px;
   font-size: 20px;
   font-weight: bold;

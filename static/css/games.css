@@ -21,6 +21,13 @@
   text-transform: uppercase;
 }
 
+.games-list {
+  padding-bottom: 70px; /* nav + marge */
+}
+
+/*****************************/
+/* Score */
+
 .score {
   display: flex;
   align-items: center;
