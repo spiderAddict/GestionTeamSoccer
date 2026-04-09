@@ -1,3 +1,17 @@
+
+.stats-table { 
+    table-layout: fixed; 
+    width: 100%; 
+    border-collapse: collapse; 
+    font-size: 14px; 
+}
+
+.stats-table th, td { 
+    border: 1px solid #ccc; 
+    padding: 4px; 
+    text-align: center; 
+}
+  
 /* Dates verticales */
 th.vertical {
 writing-mode: vertical-rl;
