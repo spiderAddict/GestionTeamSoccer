@@ -56,7 +56,9 @@
 }
 
 /* Mobile section */
-
+.section {
+  padding: 1rem 1rem;
+}
 .fab {
   position: fixed;
   bottom: 80px;
