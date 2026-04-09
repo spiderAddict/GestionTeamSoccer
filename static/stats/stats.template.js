@@ -13,33 +13,8 @@ export function statsTemplate(games, players, payments) {
   table { table-layout: fixed; width: 100%; border-collapse: collapse; }
   th, td { border: 1px solid #ccc; padding: 4px; text-align: center; }
   
-  /* Dates verticales */
-  th.vertical {
-    writing-mode: vertical-rl;
-    transform: rotate(180deg);
-    white-space: nowrap;
-    padding: 2px 5px;
-    font-size: 12px;
-  }
-
-  /* petites cases colorées */
-  .cell {
-    width: 24px;
-    height: 24px;
-    margin: auto;
-    border-radius: 4px;
-    display: inline-block;
-    cursor: pointer;
-    transition: 0.2s;
-  }
-  .cell:hover { transform: scale(1.2); }
-
-  .green { background-color: #6de982; }
-  .red { background-color: #c6c8c9; }
-  .yellow { background-color: #ffc13b; }
-  .grey { background-color: #c6c8c9; }
 </style>
-  <div class="table-wrapper">
+  <div>
     <table>
       <thead>
         <tr>

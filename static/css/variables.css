@@ -3,6 +3,8 @@
     --color-primary: #f7f7f7;
     --color-border-primary:black;
     --color-background-primary:#ff7832;
+    --color-background-card-primary: #ececec;
+    --color-header-primary: #faf2ee;
 
     /* Couleurs secondaires */    
     --color-border-secondary:black;
