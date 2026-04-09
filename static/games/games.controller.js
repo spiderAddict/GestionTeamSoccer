@@ -5,6 +5,8 @@ import { gamesTemplate } from "./games.template.js";
 // Render page
 export async function renderGamesPage(container) {
   const [games, players] = await Promise.all([getGames(), getPlayers()]);
+  // Trier les matchs du plus récent au plus ancien
+  games.sort((a, b) => new Date(b.date) - new Date(a.date));
   container.innerHTML = gamesTemplate(games, players);
   attachEvents(container, games, players);
 }

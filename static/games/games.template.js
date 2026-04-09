@@ -9,9 +9,7 @@ export function gamesTemplate(games, players) {
     </header>
 
     <div class="games-list">
-      ${games
-        .sort((a, b) => new Date(b.date) - new Date(a.date)) // tri décroissant sur la date du match
-        .map(m => {
+      ${games.map(m => {
           const matchPlayers = m.players.map(id => {
             const p = players.find(pl => pl.id === id);
             return displayPlayerName(p);
@@ -21,7 +19,7 @@ export function gamesTemplate(games, players) {
         // Travailler résultats
         let butsPour = null
         let butsContre = null
-        const match = m.result.match(/^(\d{1,2})-(\d{1,2})$/)
+        const match = m.result?.match(/^(\d{1,2})-(\d{1,2})$/)
         if (match) {
           butsPour = parseInt(match[1])
           butsContre = parseInt(match[2])}
