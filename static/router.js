@@ -4,6 +4,7 @@ import { renderPlayersPage } from "./players/players.controller.js";
 import { renderGamesPage } from "./games/games.controller.js";
 import { renderPaymentsPage } from "./payments/payments.controller.js";
 import { renderHomePage } from "./homepage.js";
+import { renderStatsPage } from "./stats/stats.controller.js";
 
 const appDiv = document.getElementById("app");
 
@@ -11,7 +12,8 @@ const routes = {
   "/": () => renderHomePage(appDiv),
   "/joueurs": () => renderPlayersPage(appDiv),
   "/matchs": () => renderGamesPage(appDiv),
-  "/paiements": () => renderPaymentsPage(appDiv)
+  "/paiements": () => renderPaymentsPage(appDiv),
+  "/stats": () => renderStatsPage(appDiv),
 };
 
 export function navigateTo(url) {
