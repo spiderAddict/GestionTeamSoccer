@@ -93,7 +93,7 @@ export function gamesTemplate(games, players) {
               ${players.map(p => `
                 <label class="checkbox">
                   <input type="checkbox" value="${p.id}" class="match-player-checkbox">
-                  ${p.name} ${p.surname || ''}
+                  ${displayPlayerName(p)}
                 </label>
               `).join("")}
             </div>
