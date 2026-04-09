@@ -3,16 +3,12 @@
 import { renderPlayersPage } from "./players/players.controller.js";
 import { renderGamesPage } from "./games/games.controller.js";
 import { renderPaymentsPage } from "./payments/payments.controller.js";
+import { renderHomePage } from "./homepage.js";
 
 const appDiv = document.getElementById("app");
 
 const routes = {
-  "/": () => {
-    appDiv.innerHTML = `
-      <h1 class="title">Accueil</h1>
-      <p>Bienvenue</p>
-    `;
-  },
+  "/": () => renderHomePage(appDiv),
   "/joueurs": () => renderPlayersPage(appDiv),
   "/matchs": () => renderGamesPage(appDiv),
   "/paiements": () => renderPaymentsPage(appDiv)
