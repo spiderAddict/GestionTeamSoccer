@@ -8,13 +8,28 @@ import { renderStatsPage } from "./stats/stats.controller.js";
 
 const appDiv = document.getElementById("app");
 
-const routes = {
-  "/": () => renderHomePage(appDiv),
-  "/joueurs": () => renderPlayersPage(appDiv),
-  "/matchs": () => renderGamesPage(appDiv),
-  "/paiements": () => renderPaymentsPage(appDiv),
-  "/stats": () => renderStatsPage(appDiv),
-};
+const routeGroups = [
+  {
+    paths: ["/version", "/infos" , "acceuil"],
+    handler: () => renderHomePage(appDiv),
+  },
+  {
+    paths: ["/", "/home", "/matchs"],
+    handler: () => renderGamesPage(appDiv),
+  },
+  {
+    paths: ["/joueurs"],
+    handler: () => renderPlayersPage(appDiv),
+  },
+  {
+    paths: ["/paiements"],
+    handler: () => renderPaymentsPage(appDiv),
+  },
+  {
+    paths: ["/stats"],
+    handler: () => renderStatsPage(appDiv),
+  },
+];
 
 export function navigateTo(url) {
   history.pushState(null, null, url);
@@ -23,6 +38,14 @@ export function navigateTo(url) {
 
 export function render() {
   const path = window.location.pathname;
-  const route = routes[path];
-  route ? route() : appDiv.innerHTML = "<h1>404</h1>";
+
+  const route = routeGroups.find(group =>
+    group.paths.includes(path)
+  );
+
+  if (route) {
+    route.handler();
+  } else {
+    appDiv.innerHTML = "<h1>404</h1>";
+  }
 }
