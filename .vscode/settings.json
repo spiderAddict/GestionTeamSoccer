@@ -1,12 +1,5 @@
 {
     "git.autofetch": true,
     "git.autofetchPeriod": 300,
-    "sqltools.connections": [
-        {
-            "previewLimit": 50,
-            "driver": "SQLite",
-            "database": "/database/gestion_soccer.db",
-            "name": "db"
-        }
-    ],
+    "remote.autoForwardPorts": false
 }

@@ -11,7 +11,12 @@
             "env": {
                 "APP_ENV": "dev" 
             },
-            "justMyCode": true
+            "justMyCode": true,
+            "serverReadyAction": {
+                "pattern": "Uvicorn running on http://0.0.0.0:5000",
+                "uriFormat": "http://localhost:5000",
+                "action": "openExternally"
+            }
         }
     ]
 }
