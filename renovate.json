@@ -13,12 +13,17 @@
 
   "prConcurrentLimit": 5,
 
-  "semanticCommits": "enabled",
-  "semanticCommitType": "fix",
-
   "rebaseWhen": "behind-base-branch",
 
   "packageRules": [
+    {
+      "matchUpdateTypes": ["patch"],
+      "semanticCommitType": "fix"
+    },
+    {
+      "matchUpdateTypes": ["minor", "major"],
+      "semanticCommitType": "fix"
+    },
     {
       "description": "Auto-merge safe updates",
       "matchUpdateTypes": ["patch", "minor"],
