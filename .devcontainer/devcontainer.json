@@ -17,7 +17,7 @@
       ]
     }
   },
-  "postCreateCommand": "python -m venv .venv && .venv/bin/python -m pip install --upgrade pip && .venv/bin/python -m pip install -r requirements.txt",
+  "postCreateCommand": "mkdir -p database && python -m venv .venv && .venv/bin/python -m pip install --upgrade pip && .venv/bin/python -m pip install -r requirements.txt",
   "forwardPorts": [5000],
   "portsAttributes": {
     "5000": {
