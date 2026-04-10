@@ -4,7 +4,7 @@ set -e
 
 echo "📦 Installing system dependencies..."
 sudo apt update
-sudo apt install -y sqlite3
+#sudo apt install -y sqlite3
 
 echo "📁 Preparing folders..."
 mkdir -p database
