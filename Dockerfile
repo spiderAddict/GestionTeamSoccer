@@ -1,5 +1,5 @@
 # --- Étape 1 : image de base Python ---
-FROM python:3.11-slim
+FROM python:3.12-slim
 
 # --- Variables d'environnement pour éviter les prompts ---
 ENV PYTHONUNBUFFERED=1 \
