@@ -25,7 +25,7 @@ jobs:
       valid: ${{ steps.result.outputs.valid }}
     steps:
       # ✅ IMPORTANT : récupérer tout l'historique
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
           
@@ -61,7 +61,7 @@ jobs:
     outputs:
       next_version: ${{ steps.get_tag.outputs.tag }}
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0
       - name: Setup Node.js
@@ -124,7 +124,7 @@ jobs:
       - name: Debug version
         run: |
           echo "Next version: '${{ needs.calculate-version.outputs.next_version }}'"
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
         with:
           fetch-depth: 0   # IMPORTANT pour récupérer les tags
       - name: Set up Docker Buildx
