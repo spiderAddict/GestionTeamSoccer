@@ -27,7 +27,7 @@
     {
       "description": "Auto-merge safe updates",
       "matchUpdateTypes": ["patch", "minor"],
-      "automerge": false,
+      "automerge": true,
       "automergeType": "pr"
     },
     {
