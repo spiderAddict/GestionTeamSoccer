@@ -38,7 +38,7 @@ jobs:
       - name: Lint commits
         id: commitlint
         continue-on-error: true
-        uses: wagoid/commitlint-github-action@v5
+        uses: wagoid/commitlint-github-action@v6
         with:
           # configFile: commitlint.config.js
           failOnErrors: true
