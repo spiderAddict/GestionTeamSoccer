@@ -1,4 +1,4 @@
-import { selectField, displayPlayerName } from '../helpers.js';
+import { selectField, displayPlayerName, pluralize } from '../helpers.js';
 import { getDefaultReceiverId } from './payments.logic.js';
 
 export function paymentsTemplate(payments, players, games) {
@@ -20,10 +20,10 @@ export function paymentsTemplate(payments, players, games) {
             </div>
             <div class="tag is-info is-light">
               📅 ${new Date(p.created_at).toLocaleDateString('fr-FR')}              
-              <span class="tag is-success is-light">
-                ${p.number_of_matches_paid} matchs payés
-              </span>
             </div>
+            <span class="tag is-success">
+                ${pluralize(p.number_of_matches_paid, "match joué", "matchs joués")}
+              </span>
             <div class="payment-games-list">
               ${p.match_ids
                 .map(match_id => games.find(game => game.id === match_id))
