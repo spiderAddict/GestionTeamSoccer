@@ -13,6 +13,10 @@ button {
   cursor: pointer;
 }
 
+.no-margin {
+  margin: 0;
+}
+
 .mobile-app {
   padding: 0;
   margin: 0;
