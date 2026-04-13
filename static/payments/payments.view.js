@@ -5,6 +5,10 @@ import { getGames } from "../games/games.api.js";
 import { paymentsTemplate } from "./payments.template.js";
 import { attachEvents } from "./payments.events.js";
 
+/**
+ * Rend la page des paiements
+ * @param {HTMLElement} container - Conteneur de la page
+ */
 export async function renderPaymentsPage(container) {
   const [payments, players, games] = await Promise.all([getPayments(), getPlayers(), getGames()]);
 
@@ -12,5 +16,5 @@ export async function renderPaymentsPage(container) {
   games.sort((a, b) => Date.parse(a.date) - Date.parse(b.date));
 
   container.innerHTML = paymentsTemplate(payments, players, games);
-  attachEvents(container, players, games);
+  attachEvents(container, payments, players, games);
 }
