@@ -113,8 +113,32 @@ export function displayPlayerName(player) {
  * @param {string} plural
  * @returns {string}
  */
-export function pluralize(count, singular, plural) {
+export function pluralizeSpecific(count, singular, plural) {
   return count === 1
     ? `${count} ${singular}`
     : `${count} ${plural}`;
+}
+
+/**
+ * @param {number} count
+ * @param {string} singular
+ * @returns {string}
+ */
+export function pluralize(count, singular) {
+  const plural = pluralizeAllWords(singular);
+  return count === 1
+    ? `${count} ${singular}`
+    : `${count} ${plural}`;
+}
+
+/**
+ * @param {number} count
+ * @param {string} singular
+ * @returns {string}
+ */
+function pluralizeAllWords(str) {
+  return str
+    .split(" ")
+    .map(word => word + "s")
+    .join(" ");
 }

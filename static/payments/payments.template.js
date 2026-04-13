@@ -22,7 +22,7 @@ export function paymentsTemplate(payments, players, games) {
               📅 ${new Date(p.created_at).toLocaleDateString('fr-FR')}              
             </div>
             <span class="tag is-success">
-                ${pluralize(p.number_of_matches_paid, "match joué", "matchs joués")}
+                ${pluralize(p.number_of_matches_paid, "match payé")}
               </span>
             <div class="payment-games-list">
               ${p.match_ids
