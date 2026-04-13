@@ -1,8 +1,8 @@
-import { inputField, selectField, displayPlayerName } from '../helpers.js';
+import { selectField, displayPlayerName } from '../helpers.js';
+import { getDefaultReceiverId } from './payments.logic.js';
 
 export function paymentsTemplate(payments, players, games) {
-  const pierre = players.find(p => p.name.toLowerCase() === 'pierre');
-  const defaultReceiverId = pierre ? pierre.id : '';
+  const defaultReceiverId = getDefaultReceiverId(players);
 
   return `
   <div class="mobile-app">

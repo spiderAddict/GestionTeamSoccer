@@ -2,7 +2,7 @@
 
 import { renderPlayersPage } from "./players/players.controller.js";
 import { renderGamesPage } from "./games/games.controller.js";
-import { renderPaymentsPage } from "./payments/payments.controller.js";
+import { renderPaymentsPage } from "./payments/payments.view.js";
 import { renderHomePage } from "./homepage.js";
 import { renderStatsPage } from "./stats/stats.controller.js";
 

@@ -1,19 +1,11 @@
-import { getPayments, createPayment, deletePayment } from "./payments.api.js";
-import { getPlayers } from "../players/players.api.js";
-import { getGames } from "../games/games.api.js";
-import { paymentsTemplate } from "./payments.template.js";
+// Event handlers for payments
+
+import { createPayment, deletePayment } from "./payments.api.js";
 import { showError, hideError } from "../helpers.js";
+import { validatePayment, buildPaymentData, getMatchesForPayer, getDefaultReceiverId } from "./payments.logic.js";
+import { renderPaymentsPage } from "./payments.view.js";
 
-// Main render function
-export async function renderPaymentsPage(container) {
-  const [payments, players, games] = await Promise.all([getPayments(), getPlayers(), getGames()]);
-  container.innerHTML = paymentsTemplate(payments, players, games);
-  attachEvents(container, players, games);
-}
-
-// Attach all events (FAB, modal, delete)
-function attachEvents(container, players, games) {
-  const modal = container.querySelector("#add-payment-modal");
+export function attachEvents(container, players, games) {
   const fab = container.querySelector("#add-payment-btn");
   const closeBtn = container.querySelector("#close-modal");
   const cancelBtn = container.querySelector("#cancel-new-payment");
@@ -23,8 +15,8 @@ function attachEvents(container, players, games) {
   fab.onclick = () => openModal(container, players);
 
   // ---------- Close modal ----------
-  closeBtn.onclick = cancelBtn.onclick =  () => closeModal(container);;
- 
+  closeBtn.onclick = cancelBtn.onclick = () => closeModal(container);
+
   // ---------- Gestion de sélection de payeur/receveur
   const payerSelect = container.querySelector('#new-payment-payer');
   const receiverSelect = container.querySelector('#new-payment-receiver');
@@ -58,20 +50,18 @@ function attachEvents(container, players, games) {
   });
 }
 
-// Open modal
 function openModal(container, players) {
   const modal = container.querySelector("#add-payment-modal");
   modal.classList.add("is-active");
 
   // Set defaults
-  const pierre = players.find(p => p.name.toLowerCase() === 'pierre');
-  if (pierre) {
-    container.querySelector("#new-payment-receiver").value = pierre.id;
+  const defaultReceiverId = getDefaultReceiverId(players);
+  if (defaultReceiverId) {
+    container.querySelector("#new-payment-receiver").value = defaultReceiverId;
   }
   container.querySelector("#nb-matches-paid").value = "1";
 }
 
-// Close modal
 function closeModal(container) {
   const modal = container.querySelector("#add-payment-modal");
   modal.classList.remove("is-active");
@@ -83,11 +73,9 @@ function closeModal(container) {
   checkboxes.forEach(cb => cb.checked = false);
 }
 
-// Gestion du mode de sélection en fonction des éléments sélectionnés
 async function handlePayerChange(container, games) {
-
   // Charger les matchs correspondants au payeur
-  const payer  = container.querySelector('#new-payment-payer').value;  
+  const payer = container.querySelector('#new-payment-payer').value;
   if (payer) {
     await loadMatchesForPayer(container, games, payer);
   }
@@ -97,9 +85,8 @@ async function handlePayerChange(container, games) {
 }
 
 function displaySelectionBlock(container) {
-  
   const payerSelect = container.querySelector('#new-payment-payer');
-  const payer  = payerSelect.value;
+  const payer = payerSelect.value;
   const receiver = container.querySelector('#new-payment-receiver').value;
   const blockSelection = container.querySelector('#block-selection');
 
@@ -110,11 +97,10 @@ function displaySelectionBlock(container) {
   }
 }
 
-// Chargement des matches
 async function loadMatchesForPayer(container, games, payerId) {
   const blockListDatas = container.querySelector('#block-list-datas');
-  const html = games
-    .filter(g => g.players.includes(payerId))
+  const matches = getMatchesForPayer(games, payerId);
+  const html = matches
     .map(m => `
       <label class="checkbox">
         <input type="checkbox" value="${m.id}" class="payment-match-checkbox">
@@ -125,9 +111,7 @@ async function loadMatchesForPayer(container, games, payerId) {
   blockListDatas.innerHTML = html;
 }
 
-// Activer un mode de sélection
 function activateMode(container, mode) {
-
   const blockCount = container.querySelector("#block-count");
   const blockList = container.querySelector("#block-list");
 
@@ -155,8 +139,8 @@ function activateMode(container, mode) {
   }
 }
 
-// Sauvegarde du payment
 async function savePayment(container) {
+
   const payerSelect = container.querySelector("#new-payment-payer");
   const payerId = payerSelect.value;
   const receiverSelect = container.querySelector("#new-payment-receiver");
@@ -169,31 +153,24 @@ async function savePayment(container) {
   const modeSelected = container.querySelector('input[name="match-mode"]:checked')?.value;
 
   // Validation
-  if (!payerId) {
-    showError(payerSelect);
-    return;
-  } else {
-    hideError(payerSelect);
-  }
-  if (!receiverId) {
-    showError(receiverSelect);
-    return;
-  } else {
-    hideError(receiverSelect);
-  }    
+  const validation = validatePayment(payerId, receiverId, modeSelected, selectedMatches, numberOfMatches);
 
-  if ((modeSelected === "list" && selectedMatches.length <=0 ) || 
-    (modeSelected === "count" && numberOfMatches <=0 )) {
-    alert("Au moins un match doit être sélectionné !");
+  if (!validation.valid) {
+    if (validation.error === 'payer_receiver_missing') {
+      if (!payerId) showError(payerSelect);
+      if (!receiverId) showError(receiverSelect);
+    } else if (validation.error === 'no_matches_selected') {
+      alert("Au moins un match doit être sélectionné !");
+    }
     return;
   }
 
-  await createPayment({
-    payer_id: payerId,
-    receiver_id: receiverId,
-    number_of_matches_paid: modeSelected === "list" ? selectedMatches.length : numberOfMatches,
-    match_ids: modeSelected === "list" ? selectedMatches : allMatches.slice(0, numberOfMatches),
-  });
+  hideError(payerSelect);
+  hideError(receiverSelect);
+
+  const paymentData = buildPaymentData(payerId, receiverId, modeSelected, selectedMatches, numberOfMatches, allMatches);
+
+  await createPayment(paymentData);
 
   closeModal(container);
   await renderPaymentsPage(container);
