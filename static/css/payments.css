@@ -27,3 +27,22 @@
   background-color: var(--color-background-primary);
   color: var(--color-text-secondary);
 }
+
+/* Container des checkboxes */
+.control.payment-matchs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 colonnes égales */
+  gap: 0.25rem; /* espace entre les checkboxes */
+}
+
+/* Optionnel : style des checkboxes */
+.control.payment-matchs .checkbox {
+  display: flex;
+  align-items: center;
+  padding: 0.25rem;
+  background-color: #f9f9f9;
+  border-radius: 0.25rem;
+}
+.payment-match-checkbox {
+  margin-right: 0.25rem; /* espace entre checkbox et texte */
+}

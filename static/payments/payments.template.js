@@ -55,39 +55,33 @@ export function paymentsTemplate(payments, players, games) {
       <section class="modal-card-body">
         ${selectField("Payeur *", "new-payment-payer", players.map(p => ({ value: p.id, label: displayPlayerName(p) })), true, "Le payeur est obligatoire")}
         ${selectField("Receveur *", "new-payment-receiver", players.map(p => ({ value: p.id, label: displayPlayerName(p) })), true, "Le receveur est obligatoire", defaultReceiverId)}
-        <div class="field">
-          <label class="label">Mode de sélection</label>
-          <label class="radio">
-            <input type="radio" name="match-mode" value="list" checked>
-            Matchs
-          </label>
-          <label class="radio">
-            <input type="radio" name="match-mode" value="count">
-            Nombre de matchs
-          </label>
-        </div>
-
-        <hr class="no-margin">
-
-        <!-- 🟦 OPTION 1 : Nombre -->
-        <div class="box is-hidden" id="block-count">
+        <div class="is-hidden" id="block-selection">
           <div class="field">
-            <div class="control">
-              <input class="input" type="number" id="nb-matches-paid">
+            <label class="label">Mode de sélection</label>
+            <label class="radio">
+              <input type="radio" name="match-mode" value="list" checked>
+              Matchs
+            </label>
+            <label class="radio">
+              <input type="radio" name="match-mode" value="count">
+              Nombre de matchs
+            </label>
+          </div>
+
+          <!-- 🟦 OPTION 1 : Nombre -->
+          <div class="is-hidden" id="block-count">
+            <div class="field">
+              <div class="control">
+                <input class="input" type="number" id="nb-matches-paid">
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- 🟩 OPTION 2 : Liste -->
-        <div class="box" id="block-list">
-          <div class="field">
-            <div class="control payment-matchs">
-              ${games.map(m => `
-                <label class="checkbox">
-                  <input type="checkbox" value="${m.id}" class="payment-match-checkbox">
-                  ${m.date}${m.versus_team ? ' - ' + m.versus_team : ''}
-                </label>
-              `).join("")}
+          <!-- 🟩 OPTION 2 : Liste -->
+          <div id="block-list">
+            <div class="field">
+              <div class="control payment-matchs" id="block-list-datas">
+              </div>
             </div>
           </div>
         </div>
