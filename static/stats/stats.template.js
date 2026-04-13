@@ -1,6 +1,6 @@
 import { displayPlayerName } from '../helpers.js';
 
-export function statsTemplate(games, players, payments) {
+export function statsTemplate(games, players, playerMatchState) {
   return `
   <div class="mobile-app">
 
@@ -21,8 +21,9 @@ export function statsTemplate(games, players, payments) {
             <tr>
               <td>${displayPlayerName(player)}</td>
               ${games.map(match => {
-                const present = match.players.includes(player.id);
-                return `<td><span class="cell ${present ? "yellow" : "grey"}" /></td>`;
+                const statut = playerMatchState.get(match.id)?.get(player.id) || "absent";
+                const statusCss = statut === "paid" ? "green" : statut === "played" ? "yellow" : "grey";
+                return `<td><span class="cell ${statusCss}" /></td>`;
               }).join("")}
             </tr>
           `).join("")}
