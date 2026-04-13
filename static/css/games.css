@@ -32,6 +32,7 @@
   display: flex;
   align-items: center;
   position: relative;
+  margin-top: 0.25rem
 }
 
 .score-part {
@@ -63,14 +64,10 @@
   margin-top: 0.5rem;
 }
 
-/* Badge joueur orange */
-.player-badge {
+/* Badge joueur */
+.tag.player-badge {
   background-color: var(--color-background-primary);
   color: var(--color-text-secondary);
-  padding: 0.3rem 0.6rem;
-  border-radius: 0.3rem;
-  font-size: 0.8rem;
-  font-weight: 500;
 }
 
 /* Container des checkboxes */

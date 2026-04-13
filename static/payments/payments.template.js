@@ -15,7 +15,7 @@ export function paymentsTemplate(payments, players, games) {
       ${payments.map(p => `
         <div class="card payment-card">
           <div>
-            <div class="tag is-info">
+            <div class="tag is-info has-text-weight-bold">
               ${players.find(pl => pl.id === p.payer_id).name} ➟ ${players.find(pl => pl.id === p.receiver_id).name}
             </div>
             <div class="tag is-info is-light">

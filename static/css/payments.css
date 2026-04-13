@@ -22,7 +22,7 @@
   padding-bottom: 70px; /* nav + marge */
 }
 
-/* Badge joueur orange */
+/* Badge match */
 .tag.game-badge {
   background-color: var(--color-background-primary);
   color: var(--color-text-secondary);

@@ -39,7 +39,7 @@ export function gamesTemplate(games, players) {
                     : ''}
                 </div>
                 <div class="match-players-list">
-                  ${matchPlayers.split(", ").map(p => `<span class="player-badge">${p}</span>`).join("")}
+                  ${matchPlayers.split(", ").map(p => `<span class="tag player-badge">${p}</span>`).join("")}
                 </div>
               </div>
               <div class="actions match-actions">

@@ -5,6 +5,7 @@
     --color-background-primary:#ff7832;
     --color-background-card-primary: #ececec;
     --color-header-primary: #f7f7f7;
+    --color-background-versus-team-primary: var(--color-background-card-primary);
 
     /* Couleurs secondaires */    
     --color-border-secondary:black;
