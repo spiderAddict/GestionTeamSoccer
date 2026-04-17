@@ -9,7 +9,11 @@
         "git.autofetch": true,
         "git.autofetchPeriod": 300,
         "python.languageServer": "Pylance",
-        "python.analysis.typeCheckingMode": "basic"
+        "python.analysis.typeCheckingMode": "strict",
+        "python.analysis.diagnosticMode": "workspace",
+        "python.analysis.inlayHints.functionReturnTypes": true,
+        "python.analysis.inlayHints.parameterTypes": true,
+        "python.analysis.inlayHints.variableTypes": true
       },
       "extensions": [
         "ms-python.python",
