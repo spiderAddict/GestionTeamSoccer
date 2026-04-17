@@ -3,11 +3,12 @@ import sys
 import os
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse, Response
 from contextlib import asynccontextmanager
 from alembic import command
 from alembic.config import Config
-from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
+from typing import Callable, Awaitable
 
 # --- Configuration ---
 PORT = int(os.getenv("PORT", 5000))
@@ -70,13 +71,13 @@ app.add_middleware(
 
 # --- Middleware de logs des requêtes ---
 @app.middleware("http")
-async def log_requests(request: Request, call_next):
+async def log_requests(request: Request, call_next: Callable[[Request], Awaitable[Response]]) -> Response:
     logger.debug(f"Request: {request.method} {request.url}")
     try:
         body = await request.body()
         if body:
             logger.debug(f"Request body: {body}")
-        response = await call_next(request)
+        response: Response = await call_next(request)
         logger.debug(f"Response status: {response.status_code}")
         return response
     except Exception as e:

@@ -41,11 +41,11 @@ class PaymentCreate(BaseModel):
 # =============================
 
 @router.get("", response_model=List[PaymentSchema])
-def get_payments(db: Session = Depends(get_db)):
-    payments = db.query(Payment).all()
+def get_payments(db: Session = Depends(get_db))  -> List[PaymentSchema]:
+    payments: List[Payment] = db.query(Payment).all()
 
     # transformer les matches en liste d'id
-    result = []
+    result: List[PaymentSchema] = []
     for p in payments:
         result.append(
             PaymentSchema(
