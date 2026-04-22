@@ -32,16 +32,16 @@ class MatchCreate(BaseModel):
 
 # --- CRUD --- 
 @router.get("", response_model=List[MatchSchema])
-def get_matchs(db: Session = Depends(get_db)):
+def get_matchs(db: Session = Depends(get_db)) -> List[Match]:
     return db.query(Match).all()
 
 @router.post("", response_model=MatchSchema)
-def create_match(match: MatchCreate, db: Session = Depends(get_db)):
+def create_match(match: MatchCreate, db: Session = Depends(get_db)) -> Match:
     if not (3 <= len(match.players) <= 8):
         raise HTTPException(status_code=400, detail="Il faut sélectionner entre 3 et 8 joueurs")
     
     # Vérifier que les joueurs existent
-    db_players = db.query(Player).filter(Player.id.in_(match.players)).all()
+    db_players: List[Player] = db.query(Player).filter(Player.id.in_(match.players)).all()
     if len(db_players) != len(match.players):
         raise HTTPException(status_code=400, detail="Certains joueurs n'existent pas")
 
@@ -57,22 +57,22 @@ def create_match(match: MatchCreate, db: Session = Depends(get_db)):
     return db_match
 
 @router.get("/{match_id}", response_model=MatchSchema)
-def get_match(match_id: str, db: Session = Depends(get_db)):
-    db_match = db.query(Match).filter(Match.id == match_id).first()
+def get_match(match_id: str, db: Session = Depends(get_db)) -> Match:
+    db_match: Match | None = db.query(Match).filter(Match.id == match_id).first()
     if not db_match:
         raise HTTPException(status_code=404, detail="Match not found")
     return db_match
 
 @router.put("/{match_id}", response_model=MatchSchema)
-def update_match(match_id: str, match: MatchCreate, db: Session = Depends(get_db)):
-    db_match = db.query(Match).filter(Match.id == match_id).first()
+def update_match(match_id: str, match: MatchCreate, db: Session = Depends(get_db)) -> Match:
+    db_match: Match | None = db.query(Match).filter(Match.id == match_id).first()
     if not db_match:
         raise HTTPException(status_code=404, detail="Match not found")
 
     if not (3 <= len(match.players) <= 8):
         raise HTTPException(status_code=400, detail="Il faut sélectionner entre 3 et 8 joueurs")
     
-    db_players = db.query(Player).filter(Player.id.in_(match.players)).all()
+    db_players: List[Player] = db.query(Player).filter(Player.id.in_(match.players)).all()
     if len(db_players) != len(match.players):
         raise HTTPException(status_code=400, detail="Certains joueurs n'existent pas")
 
@@ -86,8 +86,8 @@ def update_match(match_id: str, match: MatchCreate, db: Session = Depends(get_db
     return db_match
 
 @router.delete("/{match_id}")
-def delete_match(match_id: str, db: Session = Depends(get_db)):
-    db_match = db.query(Match).filter(Match.id == match_id).first()
+def delete_match(match_id: str, db: Session = Depends(get_db)) -> dict[str, str]:
+    db_match: Match | None = db.query(Match).filter(Match.id == match_id).first()
     if not db_match:
         raise HTTPException(status_code=404, detail="Match not found")
     db.delete(db_match)

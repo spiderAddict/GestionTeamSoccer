@@ -61,10 +61,10 @@ def get_payments(db: Session = Depends(get_db))  -> List[PaymentSchema]:
 
 
 @router.post("", response_model=PaymentSchema)
-def create_payment(payment: PaymentCreate, db: Session = Depends(get_db)):
+def create_payment(payment: PaymentCreate, db: Session = Depends(get_db)) -> PaymentSchema:
 
     # Vérifier que les matchs existent
-    matches = db.query(Match).filter(Match.id.in_(payment.match_ids)).all()
+    matches: List[Match] = db.query(Match).filter(Match.id.in_(payment.match_ids)).all()
     if len(matches) != len(payment.match_ids):
         raise HTTPException(status_code=400, detail="One or more matches not found")
 
@@ -106,8 +106,8 @@ def create_payment(payment: PaymentCreate, db: Session = Depends(get_db)):
 
 
 @router.get("/{payment_id}", response_model=PaymentSchema)
-def get_payment(payment_id: str, db: Session = Depends(get_db)):
-    db_payment = db.query(Payment).filter(Payment.id == payment_id).first()
+def get_payment(payment_id: str, db: Session = Depends(get_db)) -> PaymentSchema:
+    db_payment: Payment | None = db.query(Payment).filter(Payment.id == payment_id).first()
     if not db_payment:
         raise HTTPException(status_code=404, detail="Payment not found")
 
@@ -122,8 +122,8 @@ def get_payment(payment_id: str, db: Session = Depends(get_db)):
 
 
 @router.delete("/{payment_id}")
-def delete_payment(payment_id: str, db: Session = Depends(get_db)):
-    db_payment = db.query(Payment).filter(Payment.id == payment_id).first()
+def delete_payment(payment_id: str, db: Session = Depends(get_db)) -> dict[str, str]:
+    db_payment: Payment | None = db.query(Payment).filter(Payment.id == payment_id).first()
     if not db_payment:
         raise HTTPException(status_code=404, detail="Payment not found")
 

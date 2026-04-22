@@ -35,11 +35,11 @@ class PlayerCreate(BaseModel):
 # --- CRUD ---
 # --- Routes ---
 @router.get("", response_model=List[PlayerSchema])
-def get_players(db: Session = Depends(get_db)):
+def get_players(db: Session = Depends(get_db)) -> List[Player]:
     return db.query(Player).all()
 
 @router.post("", response_model=PlayerSchema)
-def create_player(player: PlayerCreate, db: Session = Depends(get_db)):
+def create_player(player: PlayerCreate, db: Session = Depends(get_db)) -> Player:
     db_player = Player(
         name=player.name,
         surname=player.surname,
@@ -52,15 +52,15 @@ def create_player(player: PlayerCreate, db: Session = Depends(get_db)):
     return db_player
 
 @router.get("/{player_id}", response_model=PlayerSchema)
-def get_player(player_id: str, db: Session = Depends(get_db)):
-    db_player = db.query(Player).filter(Player.id == player_id).first()
+def get_player(player_id: str, db: Session = Depends(get_db)) -> Player:
+    db_player: Player | None = db.query(Player).filter(Player.id == player_id).first()
     if not db_player:
         raise HTTPException(status_code=404, detail="Player not found")
     return db_player
 
 @router.put("/{player_id}", response_model=PlayerSchema)
-def update_player(player_id: str, player: PlayerCreate, db: Session = Depends(get_db)):
-    db_player = db.query(Player).filter(Player.id == player_id).first()
+def update_player(player_id: str, player: PlayerCreate, db: Session = Depends(get_db)) -> Player:
+    db_player: Player | None = db.query(Player).filter(Player.id == player_id).first()
     if not db_player:
         raise HTTPException(status_code=404, detail="Player not found")
     db_player.name = player.name
@@ -73,8 +73,8 @@ def update_player(player_id: str, player: PlayerCreate, db: Session = Depends(ge
     return db_player
 
 @router.delete("/{player_id}")
-def delete_player(player_id: str, db: Session = Depends(get_db)):
-    db_player = db.query(Player).filter(Player.id == player_id).first()
+def delete_player(player_id: str, db: Session = Depends(get_db)) -> dict[str, str]:
+    db_player: Player | None = db.query(Player).filter(Player.id == player_id).first()
     if not db_player:
         raise HTTPException(status_code=404, detail="Player not found")
     db.delete(db_player)

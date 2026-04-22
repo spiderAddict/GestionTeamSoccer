@@ -15,7 +15,7 @@ payment_match_association = Table(
 
 class Payment(Base):
     
-    __tablename__ = "payment"
+    __tablename__: str = "payment"
 
     id: Mapped[str] = mapped_column(
         String(36),
