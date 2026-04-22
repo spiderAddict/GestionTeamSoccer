@@ -35,6 +35,11 @@ alembic revision -m "Rendre email nullable sur player"
 ## Appliquer la migration manuellement
 alembic upgrade head
 
-# Vérifier l'état de la DB
+## Vérifier l'état de la DB
 alembic current
+
+## Historique des versions
 alembic history
+
+## Forcer alembic a se considérer à jour
+alembic stamp head
