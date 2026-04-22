@@ -5,7 +5,6 @@ from models import Match
 from models import Player
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
-from datetime import date as DateType
 
 router = APIRouter(
     prefix="/api/matchs",
