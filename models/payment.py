@@ -23,6 +23,11 @@ class Payment(Base):
         default=lambda: str(uuid.uuid4()),
         nullable=False
     )
+    season_id: Mapped[int] = mapped_column(
+        Integer,
+        ForeignKey("season.id"),
+        nullable=False
+    )
     payer_id: Mapped[str] = mapped_column(
         String(36),
         ForeignKey("player.id", ondelete="CASCADE"),

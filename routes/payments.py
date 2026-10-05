@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from typing import List
 from database import get_db
-from models import Payment, Player, Match
+from models import Payment, Player, Match, Season
 from sqlalchemy.orm import Session
 from sqlalchemy import exists
 from pydantic import BaseModel
@@ -18,6 +18,7 @@ router = APIRouter(
 
 class PaymentSchema(BaseModel):
     id: str
+    season_id: int
     payer_id: str
     receiver_id: str
     number_of_matches_paid: int
@@ -42,7 +43,10 @@ class PaymentCreate(BaseModel):
 
 @router.get("", response_model=List[PaymentSchema])
 def get_payments(db: Session = Depends(get_db))  -> List[PaymentSchema]:
-    payments: List[Payment] = db.query(Payment).all()
+    latest_season = db.query(Season).order_by(Season.id.desc()).first()
+    if not latest_season:
+        return []
+    payments: List[Payment] = db.query(Payment).filter(Payment.season_id == latest_season.id).all()
 
     # transformer les matches en liste d'id
     result: List[PaymentSchema] = []
@@ -50,6 +54,7 @@ def get_payments(db: Session = Depends(get_db))  -> List[PaymentSchema]:
         result.append(
             PaymentSchema(
                 id=p.id,
+                season_id=p.season_id,
                 payer_id=p.payer_id,
                 receiver_id=p.receiver_id,
                 number_of_matches_paid=p.number_of_matches_paid,
@@ -62,9 +67,15 @@ def get_payments(db: Session = Depends(get_db))  -> List[PaymentSchema]:
 
 @router.post("", response_model=PaymentSchema)
 def create_payment(payment: PaymentCreate, db: Session = Depends(get_db)) -> PaymentSchema:
+    latest_season = db.query(Season).order_by(Season.id.desc()).first()
+    if not latest_season:
+        raise HTTPException(status_code=500, detail="Aucune saison n'est configurée")
 
     # Vérifier que les matchs existent
-    matches: List[Match] = db.query(Match).filter(Match.id.in_(payment.match_ids)).all()
+    matches: List[Match] = db.query(Match).filter(
+        Match.id.in_(payment.match_ids),
+        Match.season_id == latest_season.id
+    ).all()
     if len(matches) != len(payment.match_ids):
         raise HTTPException(status_code=400, detail="One or more matches not found")
 
@@ -84,6 +95,7 @@ def create_payment(payment: PaymentCreate, db: Session = Depends(get_db)) -> Pay
         raise HTTPException(status_code=400, detail="Receiver not found")    
 
     db_payment = Payment(
+        season_id=latest_season.id,
         payer_id=payment.payer_id,
         receiver_id=payment.receiver_id,
         number_of_matches_paid=payment.number_of_matches_paid
@@ -97,6 +109,7 @@ def create_payment(payment: PaymentCreate, db: Session = Depends(get_db)) -> Pay
 
     return PaymentSchema(
         id=db_payment.id,
+        season_id=db_payment.season_id,
         payer_id=db_payment.payer_id,
         receiver_id=db_payment.receiver_id,
         number_of_matches_paid=db_payment.number_of_matches_paid,
@@ -113,6 +126,7 @@ def get_payment(payment_id: str, db: Session = Depends(get_db)) -> PaymentSchema
 
     return PaymentSchema(
         id=db_payment.id,
+        season_id=db_payment.season_id,
         payer_id=db_payment.payer_id,
         receiver_id=db_payment.receiver_id,
         number_of_matches_paid=db_payment.number_of_matches_paid,

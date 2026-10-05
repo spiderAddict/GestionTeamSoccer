@@ -1,5 +1,5 @@
 import uuid
-from sqlalchemy import String, Text
+from sqlalchemy import ForeignKey, Integer, String, Text
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.dialects.postgresql import JSON
 from database import Base
@@ -12,6 +12,11 @@ class Match(Base):
         String(36),
         primary_key=True,
         default=lambda: str(uuid.uuid4()),
+        nullable=False
+    )
+    season_id: Mapped[int] = mapped_column(
+        Integer,
+        ForeignKey("season.id"),
         nullable=False
     )
     date: Mapped[str] = mapped_column(String(10), nullable=False)  # stocké en ISO YYYY-MM-DD

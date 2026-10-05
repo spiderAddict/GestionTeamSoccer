@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from typing import List
 from database import get_db
-from models import Match
+from models import Match, Season
 from models import Player
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
@@ -14,6 +14,7 @@ router = APIRouter(
 # --- Schéma Pydantic pour requêtes/réponses ---
 class MatchSchema(BaseModel):
     id: str
+    season_id: int
     date: str
     result: str | None = None
     versus_team: str | None = None
@@ -33,10 +34,17 @@ class MatchCreate(BaseModel):
 # --- CRUD --- 
 @router.get("", response_model=List[MatchSchema])
 def get_matchs(db: Session = Depends(get_db)) -> List[Match]:
-    return db.query(Match).all()
+    latest_season = db.query(Season).order_by(Season.id.desc()).first()
+    if not latest_season:
+        return []
+    return db.query(Match).filter(Match.season_id == latest_season.id).all()
 
 @router.post("", response_model=MatchSchema)
 def create_match(match: MatchCreate, db: Session = Depends(get_db)) -> Match:
+    latest_season = db.query(Season).order_by(Season.id.desc()).first()
+    if not latest_season:
+        raise HTTPException(status_code=500, detail="Aucune saison n'est configurée")
+
     if not (3 <= len(match.players) <= 8):
         raise HTTPException(status_code=400, detail="Il faut sélectionner entre 3 et 8 joueurs")
     
@@ -46,6 +54,7 @@ def create_match(match: MatchCreate, db: Session = Depends(get_db)) -> Match:
         raise HTTPException(status_code=400, detail="Certains joueurs n'existent pas")
 
     db_match = Match(
+        season_id=latest_season.id,
         date=match.date,
         result=match.result,
         versus_team=match.versus_team,
