@@ -73,7 +73,12 @@ function attachEvents(container, players) {
       // Show confirmation dialog
       const confirmed = confirm("Êtes-vous sûr(e) de vouloir supprimer ce joueur ? Cette action ne peut pas être annulée.");
       if (confirmed) {
-        await deletePlayer(id);
+        try {
+          await deletePlayer(id);
+        } catch (err) {
+          alert(err.message);
+          return;
+        }
         await renderPlayersPage(container);
       }
     };
