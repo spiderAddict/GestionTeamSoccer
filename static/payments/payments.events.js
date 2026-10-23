@@ -2,6 +2,7 @@ import { createPayment, deletePayment } from "./payments.api.js";
 import { showError, hideError } from "../helpers.js";
 import { validatePayment, buildPaymentData, getUnpaidMatchesForPlayer, getDefaultReceiverId } from "./payments.logic.js";
 import { renderPaymentsPage } from "./payments.view.js";
+import { getSelectedSeason } from "../season.js";
 
 /**
  * Attache tous les événements pour la page des paiements
@@ -48,7 +49,12 @@ export function attachEvents(container, payments, players, games) {
       // Show confirmation dialog
       const confirmed = confirm("Êtes-vous sûr(e) de vouloir supprimer ce paiement ? Cette action ne peut pas être annulée.");
       if (confirmed) {
-        await deletePayment(id);
+        try {
+          await deletePayment(id);
+        } catch (err) {
+          alert(err.message);
+          return;
+        }
         await renderPaymentsPage(container);
       }
     };
@@ -224,7 +230,12 @@ async function savePayment(container) {
 
   const paymentData = buildPaymentData(payerId, receiverId, modeSelected, selectedMatches, numberOfMatches, allMatches);
 
-  await createPayment(paymentData);
+  try {
+    await createPayment(getSelectedSeason().id, paymentData);
+  } catch (err) {
+    alert(err.message);
+    return;
+  }
 
   closeModal(container);
   await renderPaymentsPage(container);

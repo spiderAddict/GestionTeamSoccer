@@ -1,12 +1,15 @@
 import { displayPlayerName } from '../helpers.js';
+import { seasonSelectorTemplate, closedSeasonBannerTemplate } from '../season.selector.js';
 
-export function gamesTemplate(games, players) {
+export function gamesTemplate(games, players, readOnly = false) {
   return `
   <div class="mobile-app">
 
     <header class="mobile-header">
       <h1>⚽ Matchs</h1>
+      ${seasonSelectorTemplate()}
     </header>
+    ${closedSeasonBannerTemplate()}
 
     <div class="games-list">
       ${games.map(m => {
@@ -42,16 +45,17 @@ export function gamesTemplate(games, players) {
                   ${matchPlayers.split(", ").map(p => `<span class="tag player-badge">${p}</span>`).join("")}
                 </div>
               </div>
+              ${readOnly ? '' : `
               <div class="actions match-actions">
                 <button class="action-btn" data-id="${m.id}" data-action="edit">✏️</button>
                 <button class="action-btn danger" data-id="${m.id}" data-action="delete">🗑️</button>
-              </div>
+              </div>`}
           </div>`;
       }).join("")}
     </div>
 
     <!-- FAB pour ajout -->
-    <button id="add-match-btn" class="fab">+</button>
+    ${readOnly ? '' : `<button id="add-match-btn" class="fab">+</button>`}
 
     <!-- Modal pour ajout/édition -->
     <div id="add-match-modal" class="modal">

@@ -1,12 +1,14 @@
+import { fetchJson } from "../helpers.js";
+
 const API_GAMES_URL = "/api/matchs";
 
-export async function getGames() {
-  const res = await fetch(API_GAMES_URL);
-  return await res.json();
+/** @param {number} seasonId */
+export async function getGames(seasonId) {
+  return fetchJson(`${API_GAMES_URL}?season_id=${seasonId}`);
 }
 
 export async function createGame(match) {
-  await fetch(API_GAMES_URL, {
+  await fetchJson(API_GAMES_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(match)
@@ -14,7 +16,7 @@ export async function createGame(match) {
 }
 
 export async function updateGame(id, match) {
-  await fetch(`${API_GAMES_URL}/${id}`, {
+  await fetchJson(`${API_GAMES_URL}/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(match)
@@ -22,5 +24,5 @@ export async function updateGame(id, match) {
 }
 
 export async function deleteGame(id) {
-  await fetch(`${API_GAMES_URL}/${id}`, { method: "DELETE" });
+  await fetchJson(`${API_GAMES_URL}/${id}`, { method: "DELETE" });
 }

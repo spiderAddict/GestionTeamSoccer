@@ -1,3 +1,5 @@
+import { fetchJson } from "../helpers.js";
+
 const API_PLAYERS_URL = "/api/players";
 
 export async function getPlayers() {
@@ -22,7 +24,7 @@ export async function updatePlayer(id, data) {
 }
 
 export async function deletePlayer(id) {
-  await fetch(`${API_PLAYERS_URL}/${id}`, {
+  await fetchJson(`${API_PLAYERS_URL}/${id}`, {
     method: "DELETE"
   });
 }

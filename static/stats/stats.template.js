@@ -1,4 +1,5 @@
 import { displayPlayerName } from '../helpers.js';
+import { seasonSelectorTemplate } from '../season.selector.js';
 
 export function statsTemplate(games, players, playerMatchState) {
   return `
@@ -6,6 +7,7 @@ export function statsTemplate(games, players, playerMatchState) {
 
     <header class="mobile-header">
       <h1>📈 Statistiques</h1>
+      ${seasonSelectorTemplate()}
     </header>
 
     <div>
