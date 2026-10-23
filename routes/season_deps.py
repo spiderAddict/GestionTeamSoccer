@@ -19,6 +19,6 @@ def get_selected_season(season_id: int | None = Query(None), db: Session = Depen
         raise HTTPException(status_code=404, detail="Saison introuvable")
     return season
 
-def ensure_season_open(season: Season) -> None:
-    if season.closed_at is not None:
+def ensure_season_open(season: Season | None) -> None:
+    if season is not None and season.closed_at is not None:
         raise HTTPException(status_code=409, detail="Saison clôturée : les matchs ne sont plus modifiables")
