@@ -5,6 +5,7 @@ from models import Match, Season
 from models import Player
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
+from routes.season_deps import get_current_season, get_selected_season, ensure_season_open
 
 router = APIRouter(
     prefix="/api/matchs",
@@ -33,17 +34,11 @@ class MatchCreate(BaseModel):
 
 # --- CRUD --- 
 @router.get("", response_model=List[MatchSchema])
-def get_matchs(db: Session = Depends(get_db)) -> List[Match]:
-    latest_season = db.query(Season).order_by(Season.id.desc()).first()
-    if not latest_season:
-        return []
-    return db.query(Match).filter(Match.season_id == latest_season.id).all()
+def get_matchs(season: Season = Depends(get_selected_season), db: Session = Depends(get_db)) -> List[Match]:
+    return db.query(Match).filter(Match.season_id == season.id).all()
 
 @router.post("", response_model=MatchSchema)
-def create_match(match: MatchCreate, db: Session = Depends(get_db)) -> Match:
-    latest_season = db.query(Season).order_by(Season.id.desc()).first()
-    if not latest_season:
-        raise HTTPException(status_code=500, detail="Aucune saison n'est configurée")
+def create_match(match: MatchCreate, current_season: Season = Depends(get_current_season), db: Session = Depends(get_db)) -> Match:
 
     if not (3 <= len(match.players) <= 8):
         raise HTTPException(status_code=400, detail="Il faut sélectionner entre 3 et 8 joueurs")
@@ -54,7 +49,7 @@ def create_match(match: MatchCreate, db: Session = Depends(get_db)) -> Match:
         raise HTTPException(status_code=400, detail="Certains joueurs n'existent pas")
 
     db_match = Match(
-        season_id=latest_season.id,
+        season_id=current_season.id,
         date=match.date,
         result=match.result,
         versus_team=match.versus_team,
@@ -77,6 +72,7 @@ def update_match(match_id: str, match: MatchCreate, db: Session = Depends(get_db
     db_match: Match | None = db.query(Match).filter(Match.id == match_id).first()
     if not db_match:
         raise HTTPException(status_code=404, detail="Match not found")
+    ensure_season_open(db.get(Season, db_match.season_id))
 
     if not (3 <= len(match.players) <= 8):
         raise HTTPException(status_code=400, detail="Il faut sélectionner entre 3 et 8 joueurs")
@@ -99,6 +95,7 @@ def delete_match(match_id: str, db: Session = Depends(get_db)) -> dict[str, str]
     db_match: Match | None = db.query(Match).filter(Match.id == match_id).first()
     if not db_match:
         raise HTTPException(status_code=404, detail="Match not found")
+    ensure_season_open(db.get(Season, db_match.season_id))
     db.delete(db_match)
     db.commit()
     return {"status": "deleted"}
