@@ -26,7 +26,15 @@ export function seasonSelectorTemplate() {
         </button>
       </div>
     </div>
+  `;
+}
 
+/**
+ * Modale de création de saison (à placer hors du header sticky pour passer au-dessus de la page)
+ * @returns {string}
+ */
+export function seasonModalTemplate() {
+  return `
     <div id="season-modal" class="modal">
       <div class="modal-background"></div>
       <div class="modal-card">

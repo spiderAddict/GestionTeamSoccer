@@ -1,14 +1,15 @@
 import { displayPlayerName } from '../helpers.js';
-import { seasonSelectorTemplate, closedSeasonBannerTemplate } from '../season.selector.js';
+import { seasonSelectorTemplate, seasonModalTemplate, closedSeasonBannerTemplate } from '../season.selector.js';
 
 export function gamesTemplate(games, players, readOnly = false) {
   return `
   <div class="mobile-app">
 
-    <header class="mobile-header">
+    <header class="mobile-header has-season">
       <h1>⚽ Matchs</h1>
       ${seasonSelectorTemplate()}
     </header>
+    ${seasonModalTemplate()}
     ${closedSeasonBannerTemplate()}
 
     <div class="games-list">

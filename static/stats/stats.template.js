@@ -1,14 +1,15 @@
 import { displayPlayerName } from '../helpers.js';
-import { seasonSelectorTemplate } from '../season.selector.js';
+import { seasonSelectorTemplate, seasonModalTemplate } from '../season.selector.js';
 
 export function statsTemplate(games, players, playerMatchState) {
   return `
   <div class="mobile-app">
 
-    <header class="mobile-header">
+    <header class="mobile-header has-season">
       <h1>📈 Statistiques</h1>
       ${seasonSelectorTemplate()}
     </header>
+    ${seasonModalTemplate()}
 
     <div>
       <table class="stats-table">
