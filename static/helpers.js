@@ -142,3 +142,18 @@ function pluralizeAllWords(str) {
     .map(word => word + "s")
     .join(" ");
 }
+
+/**
+ * fetch qui lève une erreur avec le message de l'API si la réponse n'est pas OK
+ * @param {string} url
+ * @param {RequestInit} [options]
+ * @returns {Promise<any>}
+ */
+export async function fetchJson(url, options) {
+  const res = await fetch(url, options);
+  const body = await res.json().catch(() => null);
+  if (!res.ok) {
+    throw new Error(body?.detail || res.statusText);
+  }
+  return body;
+}
