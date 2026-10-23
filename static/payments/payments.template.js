@@ -1,6 +1,6 @@
 import { selectField, displayPlayerName, pluralize } from '../helpers.js';
 import { getDefaultReceiverId } from './payments.logic.js';
-import { seasonSelectorTemplate } from '../season.selector.js';
+import { seasonSelectorTemplate, seasonModalTemplate } from '../season.selector.js';
 
 export function paymentsTemplate(payments, players, games) {
   const defaultReceiverId = getDefaultReceiverId(players);
@@ -8,10 +8,11 @@ export function paymentsTemplate(payments, players, games) {
   return `
   <div class="mobile-app">
 
-    <header class="mobile-header">
+    <header class="mobile-header has-season">
       <h1>💸 Paiements</h1>
       ${seasonSelectorTemplate()}
     </header>
+    ${seasonModalTemplate()}
 
     <div class="payments-list">
       ${payments.map(p => `

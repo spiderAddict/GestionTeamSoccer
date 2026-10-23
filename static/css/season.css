@@ -1,8 +1,22 @@
+/* Titre à gauche, pastille à droite : pas de chevauchement sur mobile */
+.mobile-header.has-season {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  text-align: left;
+}
+
+.mobile-header.has-season h1 {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .season-selector {
-  position: absolute;
-  top: 50%;
-  right: 12px;
-  transform: translateY(-50%);
+  position: relative;
+  flex-shrink: 0;
   font-size: 13px;
   font-weight: normal;
   text-align: left;
