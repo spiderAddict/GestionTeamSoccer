@@ -1,8 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException
 from typing import List
 from database import get_db
-from models import Player
+from models import Player, Match, Payment, Season
 from sqlalchemy.orm import Session
+from sqlalchemy import or_
 from pydantic import BaseModel
 
 router = APIRouter(
@@ -31,6 +32,20 @@ class PlayerCreate(BaseModel):
     email: str | None = None
     phone_number: str | None = None
     additional_info: str | None = None
+
+# Un joueur présent dans une saison clôturée fait partie de l'historique figé
+def player_in_closed_season(db: Session, player_id: str) -> bool:
+    closed_payment = db.query(Payment).join(Season, Payment.season_id == Season.id).filter(
+        Season.closed_at.is_not(None),
+        or_(Payment.payer_id == player_id, Payment.receiver_id == player_id)
+    ).first()
+    if closed_payment:
+        return True
+
+    closed_matches: List[Match] = db.query(Match).join(Season, Match.season_id == Season.id).filter(
+        Season.closed_at.is_not(None)
+    ).all()
+    return any(player_id in m.players for m in closed_matches)
 
 # --- CRUD ---
 # --- Routes ---
@@ -77,6 +92,8 @@ def delete_player(player_id: str, db: Session = Depends(get_db)) -> dict[str, st
     db_player: Player | None = db.query(Player).filter(Player.id == player_id).first()
     if not db_player:
         raise HTTPException(status_code=404, detail="Player not found")
+    if player_in_closed_season(db, player_id):
+        raise HTTPException(status_code=409, detail="Ce joueur apparaît dans une saison clôturée : suppression impossible")
     db.delete(db_player)
     db.commit()
     return {"status": "deleted"}
