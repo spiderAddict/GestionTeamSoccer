@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import exists
 from pydantic import BaseModel
 from datetime import datetime
+from routes.season_deps import get_selected_season
 
 router = APIRouter(
     prefix="/api/payments",
@@ -42,11 +43,8 @@ class PaymentCreate(BaseModel):
 # =============================
 
 @router.get("", response_model=List[PaymentSchema])
-def get_payments(db: Session = Depends(get_db))  -> List[PaymentSchema]:
-    latest_season = db.query(Season).order_by(Season.id.desc()).first()
-    if not latest_season:
-        return []
-    payments: List[Payment] = db.query(Payment).filter(Payment.season_id == latest_season.id).all()
+def get_payments(season: Season = Depends(get_selected_season), db: Session = Depends(get_db))  -> List[PaymentSchema]:
+    payments: List[Payment] = db.query(Payment).filter(Payment.season_id == season.id).all()
 
     # transformer les matches en liste d'id
     result: List[PaymentSchema] = []
@@ -66,15 +64,12 @@ def get_payments(db: Session = Depends(get_db))  -> List[PaymentSchema]:
 
 
 @router.post("", response_model=PaymentSchema)
-def create_payment(payment: PaymentCreate, db: Session = Depends(get_db)) -> PaymentSchema:
-    latest_season = db.query(Season).order_by(Season.id.desc()).first()
-    if not latest_season:
-        raise HTTPException(status_code=500, detail="Aucune saison n'est configurée")
+def create_payment(payment: PaymentCreate, season: Season = Depends(get_selected_season), db: Session = Depends(get_db)) -> PaymentSchema:
 
     # Vérifier que les matchs existent
     matches: List[Match] = db.query(Match).filter(
         Match.id.in_(payment.match_ids),
-        Match.season_id == latest_season.id
+        Match.season_id == season.id
     ).all()
     if len(matches) != len(payment.match_ids):
         raise HTTPException(status_code=400, detail="One or more matches not found")
@@ -95,7 +90,7 @@ def create_payment(payment: PaymentCreate, db: Session = Depends(get_db)) -> Pay
         raise HTTPException(status_code=400, detail="Receiver not found")    
 
     db_payment = Payment(
-        season_id=latest_season.id,
+        season_id=season.id,
         payer_id=payment.payer_id,
         receiver_id=payment.receiver_id,
         number_of_matches_paid=payment.number_of_matches_paid
