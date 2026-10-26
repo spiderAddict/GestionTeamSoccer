@@ -39,8 +39,6 @@ jobs:
   lint-commit:
     name: Commit Lint
     runs-on: ubuntu-latest
-    outputs:
-      valid: ${{ steps.result.outputs.valid }}
     steps:
       # ✅ IMPORTANT : récupérer tout l'historique
       - uses: actions/checkout@v6
@@ -52,31 +50,20 @@ jobs:
         with:
           node-version: '24.14.1'
           
-      # ✅ Commitlint officiel
+      # ✅ Commitlint officiel : un commit non conforme fait échouer le pipeline
       - name: Lint commits
-        id: commitlint
-        continue-on-error: true
         uses: wagoid/commitlint-github-action@v6
         with:
           # configFile: commitlint.config.js
           failOnErrors: true
           failOnWarnings: false
-      
-      - name: Set output
-        id: result
-        run: |
-          if [ "${{ steps.commitlint.outcome }}" = "success" ]; then
-            echo "valid=true" >> $GITHUB_OUTPUT
-          else
-            echo "valid=false" >> $GITHUB_OUTPUT
-          fi
 
   calculate-version:
     name: Calculate Version
     runs-on: ubuntu-latest
     needs: [tests, lint-commit]
-    # ⚡ release uniquement sur un push sur main, si commitlint est passé
-    if: github.event_name == 'push' && needs.lint-commit.outputs.valid == 'true'
+    # ⚡ release uniquement sur un push sur main, après tests et commitlint réussis
+    if: github.event_name == 'push'
     permissions:
       contents: write        # nécessaire pour créer un tag
       pull-requests: write   # nécessaire pour semantic release
